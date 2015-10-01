@@ -23,7 +23,6 @@ void handler(int sig)
 		printf("complete = %d\n",complete);
 		running=0;
 		send_command(&gpio_desc,0x01);
-		//call_connected=1;
 		(void) signal(SIGINT,SIG_DFL);
 	}
 	else
@@ -44,13 +43,9 @@ void handler(int sig)
 		for(counter=0;counter<(strlen(quit_msgL));counter++)
 			send_character(&gpio_desc,quit_msgL[counter]);
 		running=0;
-		//call_connected=1;
 		send_command(&gpio_desc,0x01);
 		(void) signal(SIGINT,SIG_DFL);
 	}
-	//		send_command(&gpio_desc,0x01);
-	pid= getpid();
-	printf("pid = %d\n",pid);
 }
 int main(int argc,char *argv[])
 {	
@@ -94,7 +89,6 @@ int main(int argc,char *argv[])
 			send_command(&gpio_desc,0x01);
 			printf("inside first while\n");
 		ret =	system("linphonecsh generic \"answer\"");
-//			printf("return of system = %d\n",ret);
 			running=0;
 			call_connected=1;
 			break;
@@ -111,7 +105,6 @@ int main(int argc,char *argv[])
 			printf("value inside second while %c\n",value);
 		 if(value == '0')
                 { 
-                      //  close(gpio_fd);
                         send_command(&gpio_desc,0x01);
                         if(-1 ==  system("linphonecsh generic \"terminate\""))
 			perror("terminate command");

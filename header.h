@@ -30,18 +30,13 @@ union ascii_num {
     struct ascii decimal_val;
     char command_copy;
 };
-/* Below Functions used in GPIO - Library/Test-Program */
-int gpio_export(struct gpio_descriptor_t *);
-int gpio_set_dir(struct gpio_descriptor_t *, unsigned char);
 int gpio_set_value(struct gpio_descriptor_t* gpio_desc, unsigned int val);
+
 /* GPIO - SET VALUE */
 int gpio_fd_open(struct gpio_descriptor_t *);
 int gpio_fd_close(struct gpio_descriptor_t *);
-//void send_command(struct gpio_descriptor_t *,unsigned int);
 void send_command(struct gpio_descriptor_t *,int);
 void send_character(struct gpio_descriptor_t *,int);
-//void send_character(struct gpio_descriptor_t *,unsigned char);
-//void set_direction(const char *);
  
 #endif
 

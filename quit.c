@@ -29,18 +29,5 @@ int main()
 	while(1)
 	{
 	}
-/*int count=0;
-	gpio_desc.gpio_flag = O_WRONLY;
-        int commands[]={0x02,0x28,0x0c,0x80,0x01,0x83};
-        char *welcome_msg1="Welcome To";
-        char *welcome_msg2="LINPHONE";
-        for(count=0;count<=5;count++)
-                send_command(&gpio_desc,commands[count]);
-        for(count=0;count<(strlen(welcome_msg1));count++)
-                send_character(&gpio_desc,welcome_msg1[count]);
-        send_command(&gpio_desc,0xC4);
-        for(count=0;count<(strlen(welcome_msg2));count++)
-                send_character(&gpio_desc,welcome_msg2[count]);
-*/
 	return 0;
 }

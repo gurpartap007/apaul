@@ -27,9 +27,7 @@ int main(int argc,char *argv[])
 	printf("Ip = %s\n",ip);
 	char *quit_msgU="Dialling";
 	char *quit_msgL="IP";
-	//char value;
 	int flag=1;
-	//int gpio_fd;
 	while(1)
 	{	
 		if(flag==2)
@@ -45,27 +43,12 @@ int main(int argc,char *argv[])
 		for(counter=0;counter<(strlen(quit_msgL));counter++)
 			send_character(&gpio_desc,quit_msgL[counter]);
 		usleep(500000);
-		//send_command(&gpio_desc,0x84);
-		//for(counter=0;counter<(strlen(hostname));counter++)
-			//send_character(&gpio_desc,hostname[counter]);
 		send_command(&gpio_desc,0xC1);
 		for(counter=0;counter<(strlen(ip));counter++)
 			send_character(&gpio_desc,ip[counter]);
 		sleep(1);
 		flag++;
-		//send_command(&gpio_desc,0x01);
 	}
-/*	gpio_fd=open("/sys/class/gpio/gpio64/value",O_RDONLY);
-		while(1)
-		{
-		read(gpio_fd,&value,sizeof(char));	
-		lseek(gpio_fd,0,SEEK_SET);
-		if(value == '1')
-			{
-			system("linphonecsh generic \"answer\"");
-			break;
-			}
-		}*/
 			
 	return 0;
 }

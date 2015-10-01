@@ -11,37 +11,6 @@
 #include <time.h>
  
 #include "header.h"
- 
-/* GPIO - EXPORT */
-int gpio_export(struct gpio_descriptor_t *gpio_desc)
-{
- 
-    gpio_desc->gpio_fd = open(gpio_desc->gpio_dev, gpio_desc->gpio_flag);
- 
-    sprintf(gpio_desc->buf, "%d", gpio_desc->gpio_num);
- 
-    write(gpio_desc->gpio_fd, gpio_desc->buf, strlen(gpio_desc->buf));
-    return 0;
-}
- 
-/* GPIO - SET DIRECTION */
-int gpio_set_dir(struct gpio_descriptor_t *gpio_desc, unsigned char dir)
-{
-    int setdir_fd;
- 
-    sprintf(gpio_desc->buf, "/sys/class/gpio/gpio%d/direction", gpio_desc->gpio_num);
- 
-    setdir_fd  = open(gpio_desc->buf, gpio_desc->gpio_flag);
- 
-    if(dir)
-        write(setdir_fd, "out", 4);
-    else
-        write(setdir_fd, "in", 3);
- 
-    close(gpio_desc->gpio_fd);
-    return 0;
- 
-}
 int gpio_set_value(struct gpio_descriptor_t* gpio_desc, unsigned int val)
 {
     int setval_fd;
