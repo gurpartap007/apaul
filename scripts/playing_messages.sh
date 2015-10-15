@@ -13,6 +13,6 @@ sleep 1
 mpc clear 
 mpc load hindi
 mpc play 4
-sleep 1
+sleep 0.5
 mpc pause
  
