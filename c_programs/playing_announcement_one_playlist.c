@@ -12,23 +12,72 @@ int main()
 	char * command;
 	char * ifsilence;
 	unsigned int counter;
-	int flag=0,choice,hindi=0;
+	int flag=0,choice,hindi=0,track;
 	int gpio_fd,seek_fd,end_of_playlist_fd;
 	////////// User Interaction //////////
 	printf ("<<<<<<<<<<<<  PLEASE CHOOSE LANGUAGE  >>>>>>>>>>>>");
-	printf("\n\t\t\t\t1.HINDI");
-	printf("\n\t\t\t\t2.ENGLISH\n");
+	printf("\n\t\t\t1.HINDI");
+	printf("\n\t\t\t2.ENGLISH\n");
 	scanf("%d",&choice);
+	printf ("<<<<<<<<<<<<  PLEASE CHOOSE BACKGROUND MUSIC TRACK  >>>>>>>>>>>>");
+	printf("\n\t\t\t1.sanwal_rangiye");
+	printf("\n\t\t\t2.eid");
+	printf("\n\t\t\t3.yaad");
+	printf("\n\t\t\t4.tappe");
+	printf("\n\t\t\t5.heer");
+	printf("\n\t\t\t6.ki_banu_duniya_da");
+	printf("\n\t\t\t7.yaari_chandigarh_waliye");
+	printf("\n\t\t\t8.addiyan_chuk_chuk");
+	printf("\n\t\t\t9.Tyaari_haan_di_a");
+	printf("\n\t\t\t10.Haye_mera_dil\n");
+	scanf("%d",&track);
 	system("mpc rm current");
 	system("touch /var/lib/mpd/playlists/current.m3u");
+	switch(track)
+	{
+		case 1:
+		system("echo \"/var/lib/mpd/music/songs/track1.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 2:
+		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case3:
+		system("echo \"/var/lib/mpd/music/songs/track3.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 4:
+		system("echo \"/var/lib/mpd/music/songs/track4.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 5:
+		system("echo \"/var/lib/mpd/music/songs/track5.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 6:
+		system("echo \"/var/lib/mpd/music/songs/track6.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 7:
+		system("echo \"/var/lib/mpd/music/songs/track7.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 8:
+		system("echo \"/var/lib/mpd/music/songs/track8.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 9:
+		system("echo \"/var/lib/mpd/music/songs/track9.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 10:
+		system("echo \"/var/lib/mpd/music/songs/track10.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		default:
+		printf("wrong choice");
+		break;
+		
+	}
 	switch(choice)
 	{
 		case 1:
-		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+//		system("echo \"/var/lib/mpd/music/songs/track8.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/songs/silent3.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
-		system("echo \"/var/lib/mpd/music/hin/train_se_uttar_jayen.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/hin/welcome.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/hin/agla_station.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
-		system("echo \"/var/lib/mpd/music/stations/S_HWH.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/stations/new_delhi.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/hin/hai.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/songs/silence.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		hindi=1;
@@ -37,11 +86,11 @@ int main()
 		system("mpc load current");
 		break;
 		case 2:
-		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+//		system("echo \"/var/lib/mpd/music/songs/track9.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/songs/silent3.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
-		system("echo \"/var/lib/mpd/music/eng/deboard_train.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/eng/welcomeE.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/eng/nextstation.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
-		system("echo \"/var/lib/mpd/music/stations/S_HWH.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/stations/new_delhiE.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/songs/silence.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("mpc clear");
 		system("mpc update");
@@ -87,6 +136,7 @@ int main()
 				lseek(end_of_playlist_fd,0,SEEK_SET);
 				printf("end of playlist  is =%s\n",ifsilence);
 				if((strncmp(ifsilence,"silence",7))==0)
+				
 					break;
 			}
 			flag = 1;
@@ -103,7 +153,9 @@ int main()
 			printf(" total command is = %s\n",command);
 				//system("mpc clear");
 			//	system("mpc load current");
+				usleep(300000);
 			system("mpc play 1");
+				usleep(300000);
 			system(command);
 			flag=0;
 
