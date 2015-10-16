@@ -12,7 +12,7 @@ int main()
 	char * command;
 	char * ifsilence;
 	unsigned int counter;
-	int flag=0,choice;
+	int flag=0,choice,hindi=0;
 	int gpio_fd,seek_fd,end_of_playlist_fd;
 	////////// User Interaction //////////
 	printf ("<<<<<<<<<<<<  PLEASE CHOOSE LANGUAGE  >>>>>>>>>>>>");
@@ -24,18 +24,19 @@ int main()
 	switch(choice)
 	{
 		case 1:
-		system("echo \"/var/lib/mpd/music/songs/track1.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/hin/train_se_uttar_jayen.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/hin/agla_station.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/stations/S_HWH.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/hin/hai.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/songs/silence.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		hindi=1;
 		system("mpc clear");
 		system("mpc update");
 		system("mpc load current");
 		break;
 		case 2:
-		system("echo \"/var/lib/mpd/music/songs/track1.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/eng/deboard_train.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/eng/nextstation.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 		system("echo \"/var/lib/mpd/music/stations/S_HWH.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
@@ -52,10 +53,10 @@ int main()
 	system("mpc load current");
 	system("mpc play 1");
 	command = malloc(sizeof(char)*15);
-	ifsilence = malloc(sizeof(char)*7);
+	ifsilence = malloc(sizeof(char)*8);
 	position = malloc(sizeof(char) * 5);
 	memset(command,'\0',15);
-	memset(ifsilence,'\0',7);
+	memset(ifsilence,'\0',8);
 	memset(position,'\0',5);
 	seek_fd=open("/tmp/seek.txt",O_RDONLY|O_CREAT);
 	if(1 > (end_of_playlist_fd=open("/tmp/end",O_CREAT|O_RDONLY)))
@@ -69,16 +70,21 @@ int main()
 		{
 			close(gpio_fd);
 			system ("mpc | awk 'NR==2' | awk '{print $3}' | colrm 5 > /tmp/seek.txt");
-				usleep(300000);
+				usleep(800000);
+			if(!hindi)
+			system("mpc play 5");
+			else	
+			system("mpc play 6");
+				usleep(500000);
 			system("mpc play 2");
 			while(1)
 			{
 				usleep(300000);
-				system("mpc | awk 'NR==1' | awk '{print $3}' > /tmp/end");
-				read(end_of_playlist_fd,ifsilence,7);
+				system("mpc | awk 'NR==1' | awk '{print $1}' > /tmp/end");
+				read(end_of_playlist_fd,ifsilence,8);
 				lseek(end_of_playlist_fd,0,SEEK_SET);
 				printf("end of playlist  is =%s\n",ifsilence);
-				if((strncmp(ifsilence,"Silent",6))==0)
+				if((strncmp(ifsilence,"silence",7))==0)
 					break;
 			}
 			flag = 1;
