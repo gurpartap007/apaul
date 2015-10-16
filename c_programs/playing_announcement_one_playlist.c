@@ -57,7 +57,7 @@ int main()
 	memset(command,'\0',15);
 	memset(ifsilence,'\0',7);
 	memset(position,'\0',5);
-	seek_fd=open("/tmp/seek.txt",O_RDONLY);
+	seek_fd=open("/tmp/seek.txt",O_RDONLY|O_CREAT);
 	if(1 > (end_of_playlist_fd=open("/tmp/end",O_CREAT|O_RDONLY)))
 		perror("end of file access");
 	while(1)
@@ -69,10 +69,11 @@ int main()
 		{
 			close(gpio_fd);
 			system ("mpc | awk 'NR==2' | awk '{print $3}' | colrm 5 > /tmp/seek.txt");
+				usleep(300000);
 			system("mpc play 2");
 			while(1)
 			{
-				usleep(2500);
+				usleep(300000);
 				system("mpc | awk 'NR==1' | awk '{print $3}' > /tmp/end");
 				read(end_of_playlist_fd,ifsilence,7);
 				lseek(end_of_playlist_fd,0,SEEK_SET);
@@ -92,8 +93,8 @@ int main()
 			memset(seek,'\0',5);
 			sprintf(command,"mpc seek 00:%s",position);
 			printf(" total command is = %s\n",command);
-			//	system("mpc clear");
-			//	system("mpc load songs");
+				//system("mpc clear");
+			//	system("mpc load current");
 			system("mpc play 1");
 			system(command);
 			flag=0;
@@ -101,8 +102,10 @@ int main()
 
 		}
 		close(gpio_fd);
+//		close(seek_fd);
+//		close(end_of_playlist_fd);
 
-		sleep(0.5);
+		sleep(0.2);
 	}
 
 	return 0;
