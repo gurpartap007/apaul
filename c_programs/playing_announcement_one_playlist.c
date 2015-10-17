@@ -29,7 +29,10 @@ int main()
 	printf("\n\t\t\t7.yaari_chandigarh_waliye");
 	printf("\n\t\t\t8.addiyan_chuk_chuk");
 	printf("\n\t\t\t9.Tyaari_haan_di_a");
-	printf("\n\t\t\t10.Haye_mera_dil\n");
+	printf("\n\t\t\t10.Haye_mera_dil");
+	printf("\n\t\t\t11.gulabi_aankhein");
+	printf("\n\t\t\t12.desi_da_drum");
+	printf("\n\t\t\t13.haan_di_khushi_ch\n");
 	scanf("%d",&track);
 	system("mpc rm current");
 	system("touch /var/lib/mpd/playlists/current.m3u");
@@ -64,6 +67,14 @@ int main()
 		break;
 		case 10:
 		system("echo \"/var/lib/mpd/music/songs/track10.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		case 11:
+		system("echo \"/var/lib/mpd/music/songs/track11.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 12:
+		system("echo \"/var/lib/mpd/music/songs/track12.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 13:
+		system("echo \"/var/lib/mpd/music/songs/track13.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		break;
 		default:
 		printf("wrong choice");
