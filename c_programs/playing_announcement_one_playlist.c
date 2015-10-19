@@ -32,7 +32,12 @@ int main()
 	printf("\n\t\t\t10.Haye_mera_dil");
 	printf("\n\t\t\t11.gulabi_aankhein");
 	printf("\n\t\t\t12.desi_da_drum");
-	printf("\n\t\t\t13.haan_di_khushi_ch\n");
+	printf("\n\t\t\t13.haan_di_khushi_ch");
+	printf("\n\t\t\t14.ja_ni_ja");
+	printf("\n\t\t\t15.dil_de_varke");
+	printf("\n\t\t\t16.we_are_one");
+	printf("\n\t\t\t17.phool_tujhe_hai");
+	printf("\n\t\t\t18.rona_chadta\n");
 	scanf("%d",&track);
 	system("mpc rm current");
 	system("touch /var/lib/mpd/playlists/current.m3u");
@@ -44,7 +49,7 @@ int main()
 		case 2:
 		system("echo \"/var/lib/mpd/music/songs/track2.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		break;
-		case3:
+		case 3:
 		system("echo \"/var/lib/mpd/music/songs/track3.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		break;
 		case 4:
@@ -67,6 +72,7 @@ int main()
 		break;
 		case 10:
 		system("echo \"/var/lib/mpd/music/songs/track10.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
 		case 11:
 		system("echo \"/var/lib/mpd/music/songs/track11.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		break;
@@ -75,6 +81,21 @@ int main()
 		break;
 		case 13:
 		system("echo \"/var/lib/mpd/music/songs/track13.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 14:
+		system("echo \"/var/lib/mpd/music/songs/track14.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 15:
+		system("echo \"/var/lib/mpd/music/songs/track15.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 16:
+		system("echo \"/var/lib/mpd/music/songs/track16.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 17:
+		system("echo \"/var/lib/mpd/music/songs/track17.mp3\" >  /var/lib/mpd/playlists/current.m3u");
+		break;
+		case 18:
+		system("echo \"/var/lib/mpd/music/songs/track18.mp3\" >  /var/lib/mpd/playlists/current.m3u");
 		break;
 		default:
 		printf("wrong choice");
@@ -129,6 +150,13 @@ int main()
 		read(gpio_fd,&value,sizeof(char));
 		lseek(gpio_fd,0,SEEK_SET);
 		if(value == '0')
+		// value = one to one;
+		// if (ugly==bad)
+		// then vimport = ximsons;
+		// lipo rathy one sink lit gihj for me
+		// case do:
+		// done by all anf ret wefg jlof bje kkit maf ;
+		// 
 		{
 			close(gpio_fd);
 			system ("mpc | awk 'NR==2' | awk '{print $3}' | colrm 5 > /tmp/seek.txt");
@@ -136,8 +164,8 @@ int main()
 			//if(!hindi)
 			//system("mpc play 5");
 			//else	
-			//system("mpc play 6");
-			//	usleep(1000000);
+			system("mpc pause");
+			usleep(10000);
 			system("mpc play 2");
 			while(1)
 			{
@@ -145,7 +173,7 @@ int main()
 				system("mpc | awk 'NR==1' | awk '{print $1}' > /tmp/end");
 				read(end_of_playlist_fd,ifsilence,8);
 				lseek(end_of_playlist_fd,0,SEEK_SET);
-				printf("end of playlist  is =%s\n",ifsilence);
+				printf("PLAYLIST ---> %s\n",ifsilence);
 				if((strncmp(ifsilence,"silence",7))==0)
 				
 					break;
@@ -166,7 +194,7 @@ int main()
 			//	system("mpc load current");
 				usleep(300000);
 			system("mpc play 1");
-				usleep(300000);
+				usleep(30000);
 			system(command);
 			flag=0;
 
