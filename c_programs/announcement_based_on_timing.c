@@ -151,13 +151,13 @@ int main()
 		{
 			close(gpio_fd);
 			system ("mpc | awk 'NR==2' | awk '{print $3}' | colrm 5 > /tmp/seek.txt");
-				usleep(5000);
+			usleep(5000);
 			system("mpc play 2");
-				usleep(100000);
+				usleep(2000000);
+			system("mpc pause");
 			system("mpc clear");
-			//system("mpc update");
+			usleep(50000);
 			system("mpc load hindi");
-			usleep(10000);
 			system("mpc play 1");
 			while(hindi_dur)
 			{
@@ -206,7 +206,7 @@ int main()
 		}
 		close(gpio_fd);
 
-		sleep(0.2);
+		sleep(0.5);
 	}
 
 	return 0;
