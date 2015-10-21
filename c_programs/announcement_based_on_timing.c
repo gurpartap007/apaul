@@ -107,6 +107,7 @@ int main()
 }
 
 		system("echo \"/var/lib/mpd/music/songs/silent3.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
+		system("echo \"/var/lib/mpd/music/songs/silent3.mp3\" >>  /var/lib/mpd/playlists/current.m3u");
 	/*##############               HINDI PLAYLIST         #########################*/ 
 		printf("hindi playlist\n");	
 		system("touch /var/lib/mpd/playlists/hindi.m3u");
@@ -151,12 +152,13 @@ int main()
 		{
 			close(gpio_fd);
 			system ("mpc | awk 'NR==2' | awk '{print $3}' | colrm 5 > /tmp/seek.txt");
-			usleep(5000);
+//			usleep(5000);
 			system("mpc play 2");
 				usleep(2000000);
 			system("mpc pause");
-			system("mpc clear");
 			usleep(50000);
+			system("mpc clear");
+			//usleep(50000);
 			system("mpc load hindi");
 			system("mpc play 1");
 			while(hindi_dur)
