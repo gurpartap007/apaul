@@ -210,6 +210,8 @@ int main()
 
 		sleep(0.5);
 	}
-
+	free(seek);
+	free(command);
+	free(position);
 	return 0;
 }
