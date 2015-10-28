@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>phone</class>
+ <widget class="QWidget" name="phone">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>908</width>
+    <height>298</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>890</width>
+     <height>280</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(255, 85, 0);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>60</y>
+     <width>381</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+background-color: rgb(196, 255, 254);</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="call_button">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>180</y>
+     <width>102</width>
+     <height>102</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"> border-style: solid;
+ border-width:1px;
+ border-radius:50px;
+border-color: rgb(255, 85, 0);
+ max-width:100px;
+ max-height:100px;
+ min-width:100px;
+ min-height:100px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../apaul/Downloads/1442844605_Stop1Normal.png</normaloff>../../../apaul/Downloads/1442844605_Stop1Normal.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>128</width>
+     <height>128</height>
+    </size>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="autoRaise">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="stop_button">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>180</y>
+     <width>102</width>
+     <height>102</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"> border-style: solid;
+ border-width:1px;
+ border-radius:50px;
+border-color: rgb(255, 85, 0);
+ max-width:100px;
+ max-height:100px;
+ min-width:100px;
+ min-height:100px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../apaul/Downloads/1442843712_Stop1NormalRed.png</normaloff>../../../apaul/Downloads/1442843712_Stop1NormalRed.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>128</width>
+     <height>128</height>
+    </size>
+   </property>
+   <property name="autoRaise">
+    <bool>false</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
