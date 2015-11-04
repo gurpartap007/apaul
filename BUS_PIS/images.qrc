@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../../../Pictures/images/alarm.png</file>
+        <file>../../../Pictures/images/alert1.png</file>
+        <file>../../../Pictures/images/ann.png</file>
+        <file>../../../Pictures/images/bus.png</file>
+        <file>../../../Pictures/images/call.png</file>
+        <file>../../../Pictures/images/camera.png</file>
+        <file>../../../Pictures/images/data.png</file>
+        <file>../../../Pictures/images/datac.png</file>
+        <file>../../../Pictures/images/DEEP TYAGI (8GB).lnk</file>
+        <file>../../../Pictures/images/engine.png</file>
+        <file>../../../Pictures/images/gps.png</file>
+        <file>../../../Pictures/images/home.png</file>
+        <file>../../../Pictures/images/info.png</file>
+        <file>../../../Pictures/images/pass_info.png</file>
+        <file>../../../Pictures/images/play.png</file>
+        <file>../../../Pictures/images/settings.png</file>
+        <file>../../../Pictures/images/wifi.png</file>
+    </qresource>
+</RCC>

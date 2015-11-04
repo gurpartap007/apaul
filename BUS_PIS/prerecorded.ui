@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PreRecorded</class>
+ <widget class="QWidget" name="PreRecorded">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1349</width>
+    <height>509</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="play">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>708</y>
+     <width>1901</width>
+     <height>56</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }</string>
+   </property>
+   <property name="text">
+    <string>Announce</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="back">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>770</y>
+     <width>1901</width>
+     <height>56</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1351</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <item>
+     <widget class="QListWidget" name="listWidget">
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget {background-color: rgb(255, 255, 255);}
+QScrollBar:vertical { width: 80px; }
+QScrollBar:vertical { background-color: rgb(179, 179, 179); }</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Travelling without ticket is a punishable offence</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Any unattended or suspicious article like briefcase, bag, thermos and transistor could be a bomb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Please ensure the safety of your own luggage</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>horizontalLayoutWidget</zorder>
+  <zorder>back</zorder>
+  <zorder>play</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

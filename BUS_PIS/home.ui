@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Home</class>
+ <widget class="QWidget" name="Home">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1349</width>
+    <height>509</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QToolButton" name="toolButton_2">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>260</y>
+     <width>661</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>64</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+</string>
+   </property>
+   <property name="text">
+    <string>Announcement</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/home/apaul/Downloads/ann.png</normaloff>:/home/apaul/Downloads/ann.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>340</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>661</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>64</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+</string>
+   </property>
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/home/apaul/Downloads/settings.png</normaloff>:/home/apaul/Downloads/settings.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>260</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>661</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>64</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+</string>
+   </property>
+   <property name="text">
+    <string>Information</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/home/apaul/Downloads/info.png</normaloff>:/home/apaul/Downloads/info.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>280</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>10</y>
+     <width>661</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>60</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+</string>
+   </property>
+   <property name="text">
+    <string>Data Transfer</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/home/apaul/Downloads/data.png</normaloff>:/home/apaul/Downloads/data.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>340</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+  </widget>
+  <zorder>toolButton_4</zorder>
+  <zorder>toolButton_2</zorder>
+  <zorder>toolButton_3</zorder>
+  <zorder>toolButton</zorder>
+  <zorder>horizontalLayoutWidget_2</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
