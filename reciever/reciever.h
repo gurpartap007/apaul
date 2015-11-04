@@ -10,7 +10,7 @@ class reciever;
 
 class reciever : public QMainWindow
 {
-    Q_OBJECT
+   Q_OBJECT
 
 public:
     explicit reciever(QWidget *parent = 0);

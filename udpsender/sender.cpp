@@ -38,5 +38,6 @@ void Sender::broadcastDatagram()
 statusLabel->setText(tr("Now Broadcasting datagram %1").arg(messageNo));
 QByteArray datagram = "gurpartap" + QByteArray::number(messageNo);
 udpSocket->writeDatagram(datagram.data(),datagram.size(),QHostAddress::Broadcast,45454);
+qDebug() << datagram.size();
 ++messageNo;
 }
