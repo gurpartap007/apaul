@@ -26,7 +26,7 @@ route_selection::route_selection(QWidget *parent) :
     QStringList tables = db.tables();
     qDebug() << tables;
 
-    QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
+  /*QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
     if(file.exists())
     {
         qDebug() << "file exist of database";

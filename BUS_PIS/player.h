@@ -20,7 +20,6 @@ public:
     ~player();
     VideoWidget *videoWidget;
     QMediaPlayer *mplayer;
-
 private slots:
     void on_ovf_clicked();
     void on_ts_clicked();

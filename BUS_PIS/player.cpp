@@ -539,3 +539,14 @@ void player::on_evs_clicked()
         ui->svs->setEnabled(1);
     }
 }
+
+void player::enterEvent(QEvent *ev)
+{
+    QApplication::setOverrideCursor( QCursor(Qt::PointingHandCursor));
+
+}
+
+void player::leaveEvent(QEvent *ev)
+{
+      QApplication::restoreOverrideCursor();
+}
