@@ -39,7 +39,9 @@ private slots:
     void on_ovs_clicked();
     void on_svs_clicked();
     void on_evs_clicked();
-
+protected:
+ void enterEvent(QEvent *ev);
+ void leaveEvent(QEvent *ev);
 private:
     Ui::player *ui;
     QPixmap originalPixmap;

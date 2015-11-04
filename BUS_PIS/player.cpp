@@ -15,8 +15,7 @@ player::player(QWidget *parent) :
     ui(new Ui::player)
 {
     ui->setupUi(this);
-
-    folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
+        folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
     image_no = 1;
     slice_no = 1;
 

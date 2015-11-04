@@ -37,7 +37,7 @@ route_selection::route_selection(QWidget *parent) :
            QSqlQuery query(file_data,db);
            //qDebug() << "executed a statement";
         }
-    }
+    }*/
 
     //LISTING OF ALL ROUTES
     ui->comboBox->addItem("");
