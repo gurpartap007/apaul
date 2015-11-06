@@ -25,6 +25,8 @@ player::player(QWidget *parent) :
     imageObject = new QImage();
     mplayer = new QMediaPlayer;
 
+    video_dialog = new QFileDialog(this);
+
     connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
     connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
     connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
@@ -60,11 +62,10 @@ void player::on_ovf_clicked()
     QString dtstring = date.toString() + "-" + time.toString() + "/";
     folderpath = folderpath + dtstring;
     QDir dir(folderpath);
-    dir.mkpath(folderpath);
-
-    video_location = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                  "/home/apaul/Videos", tr("Video-Files (*.avi)"),0,QFileDialog::DontUseNativeDialog);
-    mplayer->setMedia(QUrl::fromLocalFile(video_location));
+    video_dialog->setGeometry(0,0,1366,768);
+    video_location = video_dialog->getOpenFileName(this, tr("Open File"),
+                                                  "/home/apaul/Downloads/Saved Videos", tr("Video-Files (*.avi)"),0,QFileDialog::DontUseNativeDialog);
+   mplayer->setMedia(QUrl::fromLocalFile(video_location));
     mplayer->play();
 }
 

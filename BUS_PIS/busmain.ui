@@ -358,6 +358,17 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>play</tabstop>
+  <tabstop>camera</tabstop>
+  <tabstop>home</tabstop>
+  <tabstop>bus</tabstop>
+  <tabstop>alert</tabstop>
+  <tabstop>pass_info</tabstop>
+  <tabstop>call</tabstop>
+  <tabstop>alarm</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources>
   <include location="images.qrc"/>
  </resources>

@@ -730,7 +730,7 @@ void BusMain::display_and_announcement_packets(qint64 option)
                 temp_audio_repeat_count = audio_repeat_count;
 
                 //AUDIO ADDITION
-          //      page_announce_segments[table_data_one[PAGE].toInt() - 1]  = 0;
+                //page_announce_segments[table_data_one[PAGE].toInt() - 1]  = 0;
                // while(temp_audio_repeat_count > 0)
             //    {
             //        querytextone = "select * from Annuciation_device_type_table where Stop_code = '" + table_data[STOP_CODE] + "' and Message_code = '" + table_data[MESSAGE_CODE]  + "' and Page = '" + table_data_one[PAGE] + "'";
@@ -919,8 +919,8 @@ void BusMain::display_and_announcement_packets(qint64 option)
                         temporary.append(",ETX");
 
                         //qDebug() << temporary;
-                      //  qDebug() << temporary.size();
-                     //   QTimer::singleShot(1500,mplayer,SLOT(play()));
+                        //qDebug() << temporary.size();
+                        //QTimer::singleShot(1500,mplayer,SLOT(play()));
                         if(serial->isOpen())
                         {
                             //SEND DATA
@@ -933,7 +933,7 @@ void BusMain::display_and_announcement_packets(qint64 option)
                                 /* Create the QEventLoop */
                                 qDebug() << "Waiting for ack";
                                 //QEventLoop pause;
-                             //   connect(this, SIGNAL(ack_received()), &pause, SLOT(quit()));
+                                //connect(this, SIGNAL(ack_received()), &pause, SLOT(quit()));
                                 this->readData();
                                 serial->waitForReadyRead(20);
                                 //QTimer::singleShot(2000, &pause, SLOT(quit()));
@@ -1208,8 +1208,9 @@ float get_distance(float x1, float y1, float x2, float y2)
 
 void BusMain::on_alert_clicked()
 {
+    close();
     //emit this->trial_datasend();
-    setter();
+   // setter();
 }
 
 void BusMain::newConnection()

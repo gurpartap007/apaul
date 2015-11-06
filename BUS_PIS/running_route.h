@@ -15,6 +15,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QHeaderView>
+#include <QFileInfo>
 #include <QListWidgetItem>
 #include <QHBoxLayout>
 #include "route_selection.h"

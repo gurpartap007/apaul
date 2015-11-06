@@ -26,18 +26,31 @@ route_selection::route_selection(QWidget *parent) :
     QStringList tables = db.tables();
     qDebug() << tables;
 
-  /*QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
-    if(file.exists())
+    QFileInfo info("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
+    QDateTime modifieddt = info.lastModified();
+
+    QDate moddate = modifieddt.date();
+    QTime modtime = modifieddt.time();
+    QDate currentdat = QDate::currentDate();
+    QTime currenttim = QTime::currentTime();
+
+    if((currentdat >= moddate) && ((currenttim.minute() - modtime.minute()) < 10))
     {
-        qDebug() << "file exist of database";
-        file.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream in(&file);
-        while(!in.atEnd())  {
-           QString file_data = in.readLine();
-           QSqlQuery query(file_data,db);
-           //qDebug() << "executed a statement";
+        QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
+        if(file.exists())
+        {
+            qDebug() << "file exist of database";
+            file.open(QIODevice::ReadOnly | QIODevice::Text);
+            QTextStream in(&file);
+            while(!in.atEnd())  {
+               QString file_data = in.readLine();
+               QSqlQuery query(file_data,db);
+               //qDebug() << "executed a statement";
+            }
         }
-    }*/
+    }
+    else
+        qDebug() << "File was modified more than 10 minutes ago";
 
     //LISTING OF ALL ROUTES
     ui->comboBox->addItem("");

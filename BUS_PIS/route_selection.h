@@ -13,6 +13,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QTextStream>
+#include <QDateTime>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QHeaderView>

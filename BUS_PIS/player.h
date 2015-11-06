@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include "videowidget.h"
 #include <QProcess>
+#include <QFileDialog>
 
 namespace Ui {
 class player;
@@ -20,6 +21,7 @@ public:
     ~player();
     VideoWidget *videoWidget;
     QMediaPlayer *mplayer;
+    QFileDialog *video_dialog;
 private slots:
     void on_ovf_clicked();
     void on_ts_clicked();
