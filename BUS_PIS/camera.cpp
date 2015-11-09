@@ -18,10 +18,10 @@ Camera::Camera(QWidget *parent) :
     player4 = new QMediaPlayer;
 
     //ASSIGNING URLTO THE PLAYER
-    player1->setMedia(QUrl("rtsp://192.168.0.128"));
-    player2->setMedia(QUrl("rtsp://192.168.0.128"));
-    player3->setMedia(QUrl("rtsp://192.168.0.128"));
-    player4->setMedia(QUrl("rtsp://192.168.0.128"));
+    player1->setMedia(QUrl("rtsp://192.168.1.88"));
+    player2->setMedia(QUrl("rtsp://192.168.1.88"));
+    player3->setMedia(QUrl("rtsp://192.168.1.88"));
+    player4->setMedia(QUrl("rtsp://192.168.1.88"));
 
     ui->setupUi(this);
 
