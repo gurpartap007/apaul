@@ -59,7 +59,7 @@ FFmpegTask::~FFmpegTask()
 void FFmpegTask::video_saving()
 {
     QString program = "/usr/bin/ffmpeg";
-    QString input = "rtsp://192.168.0.128";
+    QString input = "/dev/video0";
     //QString subtitles = "subtitles=/home/apaul/Downloads/1.srt";
     QStringList arguments;
 
@@ -72,10 +72,13 @@ void FFmpegTask::video_saving()
     folderpath = folderpath + dtstring;
     QDir dir(folderpath);
     dir.mkpath(folderpath);
-    folderpath = folderpath + "out%03d.avi";
+   folderpath = folderpath + "out%03d.avi";
+    //folderpath = folderpath + "webcam.avi";
 
-    arguments << "-i" << input << "-an" << "-f" << "segment" << "-c" << "copy" << "-reset_timestamps" << "1" << "-segment_time" << "00:01:00" << "-segment_format" << "mp4" << folderpath;
+   // arguments << "-f" << "v4l2" << "-i" << input << "-an" << "-f" << "segment" << "-c" << "copy" << "-reset_timestamps" << "1" << "-segment_time" << "00:01:00" << "-segment_format" << "mp4" << folderpath;
     //arguments << input;
+    arguments << "-f" << "v4l2" << "-i" << input <<  "-vcodec" << "mpeg4" << "-reset_timestamps" << "1" << "-f" << "segment" << "-segment_time" << "00:01:00" << "-segment_format" << "mp4" <<  folderpath;
+
 
     mSavingProcess->setProcessChannelMode(QProcess::MergedChannels);
     mSavingProcess->start(program, arguments);

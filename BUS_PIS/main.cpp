@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //mySplashScreen *splash = new mySplashScreen();
-    //splash->setFixedSize(500,500);
-    //splash->show();
+  //  mySplashScreen *splash = new mySplashScreen();
+   // splash->setFixedSize(1366,768);
+   // splash->show();
 
     QPixmap pixmap("/home/apaul/Downloads/buslogo.png");
     QSplashScreen splash(pixmap);

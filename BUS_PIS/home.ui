@@ -6,160 +6,177 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1349</width>
-    <height>509</height>
+    <width>1375</width>
+    <height>540</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QToolButton" name="toolButton_2">
+  <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>680</x>
-     <y>260</y>
-     <width>661</width>
-     <height>251</height>
+     <x>0</x>
+     <y>0</y>
+     <width>1371</width>
+     <height>541</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>64</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="1">
+       <widget class="QToolButton" name="toolButton_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>64</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
 </string>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/Pictures/images/ann.png</normaloff>:/Pictures/images/ann.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>340</width>
-     <height>400</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButton_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>661</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>47</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+        </property>
+        <property name="icon">
+         <iconset resource="images.qrc">
+          <normaloff>:/Pictures/images/ann.png</normaloff>:/Pictures/images/ann.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>340</width>
+          <height>220</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QToolButton" name="toolButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>60</pointsize>
+         </font>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
 </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/Pictures/images/settings.png</normaloff>:/Pictures/images/settings.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>260</width>
-     <height>300</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButton_4">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>260</y>
-     <width>661</width>
-     <height>251</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>64</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+        </property>
+        <property name="icon">
+         <iconset resource="images.qrc">
+          <normaloff>:/Pictures/images/data.png</normaloff>:/Pictures/images/data.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>340</width>
+          <height>220</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QToolButton" name="toolButton_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>47</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
 </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/Pictures/images/info.png</normaloff>:/Pictures/images/info.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>280</width>
-     <height>400</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButton">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>10</y>
-     <width>661</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>60</pointsize>
-    </font>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="images.qrc">
+          <normaloff>:/Pictures/images/settings.png</normaloff>:/Pictures/images/settings.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>340</width>
+          <height>220</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QToolButton" name="toolButton_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>64</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton{ background-color: rgb(179, 179, 179); }QToolButton:pressed{background-color: rgb(100, 100, 100); }
 </string>
-   </property>
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/Pictures/images/data.png</normaloff>:/Pictures/images/data.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>340</width>
-     <height>400</height>
-    </size>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="images.qrc">
+          <normaloff>:/Pictures/images/info.png</normaloff>:/Pictures/images/info.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>340</width>
+          <height>220</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <zorder>toolButton_4</zorder>
   <zorder>toolButton_2</zorder>
   <zorder>toolButton_3</zorder>
   <zorder>toolButton</zorder>
+  <zorder>horizontalLayoutWidget</zorder>
  </widget>
  <resources>
   <include location="images.qrc"/>

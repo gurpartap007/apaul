@@ -34,10 +34,10 @@ route_selection::route_selection(QWidget *parent) :
     QDate currentdat = QDate::currentDate();
     QTime currenttim = QTime::currentTime();
 
-    if((currentdat >= moddate) && ((currenttim.minute() - modtime.minute()) < 10))
+   if((currentdat >= moddate) && ((currenttim.minute() - modtime.minute()) < 10))
     {
         QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
-        if(file.exists())
+     /*  if(file.exists())
         {
             qDebug() << "file exist of database";
             file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -47,9 +47,9 @@ route_selection::route_selection(QWidget *parent) :
                QSqlQuery query(file_data,db);
                //qDebug() << "executed a statement";
             }
-        }
+        }*/
     }
-    else
+   else
         qDebug() << "File was modified more than 10 minutes ago";
 
     //LISTING OF ALL ROUTES

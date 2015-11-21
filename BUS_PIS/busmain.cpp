@@ -14,8 +14,7 @@
 #include "hidapi.h"
 /****************************************************************************/
 /*       MODIFIED  BUS PIS CODE ACCORDING TO 1366 X 768 RESOLUTION          */
-/*       ALL WIDGETS ARE PUT IN LAYOUTS TO PROVIDE BETTER SIZE ADJUSTMENTS  */
-/****************************************************************************/
+/*       ALL WIDGETS ARE PUT IN LAYOUTS TO PROVIDE BETTER SIZE ADJUSTMENTS*/
 
 unsigned char prev_dup_crc_high,prev_dup_crc_low;
 unsigned char crc_low_final,crc_high_final;

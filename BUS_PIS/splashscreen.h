@@ -39,20 +39,20 @@ private:
 
              painter.setPen(Qt::black);
              painter.setFont(*font1);
-             painter.drawText(190,70,"BUS");
-             painter.drawText(60,140,"PASSENGER");
-             painter.drawText(10,210,"INFORMATION");
-             painter.drawText(120,280,"SYSTEM");
+             painter.drawText(590,170,"BUS");
+             painter.drawText(460,240,"PASSENGER");
+             painter.drawText(410,310,"INFORMATION");
+             painter.drawText(520,380,"SYSTEM");
 
              painter.setFont(*font2);
-             painter.drawText(10,490,"Mfd. By : A Paul Instruments");
+             painter.drawText(440,690,"Mfd. By : A Paul Instruments");
       };
 
 private slots:
       void animateBackground()
       {
             m_pConicalGradient->setColorAt(0.5, Qt::gray);
-            m_pConicalGradient->setColorAt(1, Qt::white);
+            m_pConicalGradient->setColorAt(1, Qt::gray);
             m_pConicalGradient->setAngle(m_pDrawAngle);
             m_pConicalGradient->setCenter(width()/2,height()/2);
 

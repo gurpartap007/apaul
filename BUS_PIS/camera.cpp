@@ -18,10 +18,12 @@ Camera::Camera(QWidget *parent) :
     player4 = new QMediaPlayer;
 
     //ASSIGNING URLTO THE PLAYER
-    player1->setMedia(QUrl("rtsp://192.168.1.88"));
-    player2->setMedia(QUrl("rtsp://192.168.1.88"));
-    player3->setMedia(QUrl("rtsp://192.168.1.88"));
-    player4->setMedia(QUrl("rtsp://192.168.1.88"));
+   player1->setMedia(QUrl("file:////home/apaul/Downloads/videoplayback"));
+   player2->setMedia(QUrl("file:////home/apaul/Videos/fxguidetv-ep204.mp4"));
+   player3->setMedia(QUrl("file:////home/apaul/Videos/fxguidetv-ep204.mp4"));
+   player4->setMedia(QUrl("file:////home/apaul/Downloads/videoplayback"));
+   // player3->setMedia(QUrl("v4l2://///dev/video0"));
+    //  player4->setMedia(QUrl("v4l2:///dev/video0"));
 
     ui->setupUi(this);
 
@@ -65,25 +67,25 @@ Camera::Camera(QWidget *parent) :
 
     //MAKING LABELBOX INSIDE EACH VIDEO WIDGET
     label1 = new QLabel(videoWidget1);
-    label1->setGeometry(845,5,100,100);
+    label1->setGeometry(580,5,100,100);
     label1->setStyleSheet("color: rgb(255, 255, 255);background-color: rgba(255, 255, 255, 20);qproperty-alignment: AlignCenter;font:20pt;");
     label1->setText("Test\nText");
     label1->setVisible(true);
 
     label2 = new QLabel(videoWidget2);
-    label2->setGeometry(845,5,100,100);
+    label2->setGeometry(580,5,100,100);
     label2->setStyleSheet("color: rgb(255, 255, 255);background-color: rgba(255, 255, 255, 20);qproperty-alignment: AlignCenter;font:20pt;");
     label2->setText("Test\nText");
     label2->setVisible(true);
 
     label3 = new QLabel(videoWidget3);
-    label3->setGeometry(845,5,100,100);
+    label3->setGeometry(580,5,100,100);
     label3->setStyleSheet("color: rgb(255, 255, 255);background-color: rgba(255, 255, 255, 20);qproperty-alignment: AlignCenter;font:20pt;");
     label3->setText("Test\nText");
     label3->setVisible(true);
 
     label4 = new QLabel(videoWidget4);
-    label4->setGeometry(845,5,100,100);
+    label4->setGeometry(580,5,100,100);
     label4->setStyleSheet("color: rgb(255, 255, 255);background-color: rgba(255, 255, 255, 20);qproperty-alignment: AlignCenter;font:20pt;");
     label4->setText("Test\nText");
     label4->setVisible(true);
@@ -103,7 +105,8 @@ Camera::~Camera()
 void Camera::widget1_fullscreen()
 {
     //GOING FULLSCREEN, SO LABEL POSITION HAS TO ADJUST AND OTHER WIDGETS HAVE TO HIDE
-    label1->setGeometry(1800,5,100,100);
+    label1->setText("Camera 1");
+    label1->setGeometry(1000,5,340,200);
     videoWidget2->hide();
     videoWidget3->hide();
     videoWidget4->hide();
@@ -120,7 +123,8 @@ void Camera::widget1_normal()
 
 void Camera::widget2_fullscreen()
 {
-    label2->setGeometry(1800,5,100,100);
+    label2->setText("Camera 2");
+    label2->setGeometry(1000,5,340,200);
     videoWidget1->hide();
     videoWidget3->hide();
     videoWidget4->hide();
@@ -136,7 +140,8 @@ void Camera::widget2_normal()
 
 void Camera::widget3_fullscreen()
 {
-    label3->setGeometry(1800,5,100,100);
+    label3->setText("Camera 3");
+    label3->setGeometry(1000,5,340,200);
     videoWidget1->hide();
     videoWidget2->hide();
     videoWidget4->hide();
@@ -152,7 +157,8 @@ void Camera::widget3_normal()
 
 void Camera::widget4_fullscreen()
 {
-    label4->setGeometry(1800,5,100,100);
+    label4->setText("Camera 4");
+    label4->setGeometry(1000,5,340,200);
     videoWidget1->hide();
     videoWidget2->hide();
     videoWidget3->hide();

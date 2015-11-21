@@ -15,7 +15,7 @@ player::player(QWidget *parent) :
     ui(new Ui::player)
 {
     ui->setupUi(this);
-        folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
+    folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
     image_no = 1;
     slice_no = 1;
 
@@ -39,11 +39,11 @@ player::player(QWidget *parent) :
     ui->horizontalLayout->addWidget(videoWidget);
 
     connect(ui->listWidget_3, SIGNAL(itemClicked(QListWidgetItem*)),
-                this, SLOT(onListWidget_3ItemClicked(QListWidgetItem*)));
+            this, SLOT(onListWidget_3ItemClicked(QListWidgetItem*)));
     connect(ui->listWidget_2, SIGNAL(itemClicked(QListWidgetItem*)),
-                this, SLOT(onListWidget_2ItemClicked(QListWidgetItem*)));
+            this, SLOT(onListWidget_2ItemClicked(QListWidgetItem*)));
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-                this, SLOT(onListWidgetItemClicked(QListWidgetItem*)));
+            this, SLOT(onListWidgetItemClicked(QListWidgetItem*)));
 }
 
 player::~player()
@@ -64,8 +64,10 @@ void player::on_ovf_clicked()
     QDir dir(folderpath);
     video_dialog->setGeometry(0,0,1366,768);
     video_location = video_dialog->getOpenFileName(this, tr("Open File"),
-                                                  "/home/apaul/Downloads/Saved Videos", tr("Video-Files (*.avi)"),0,QFileDialog::DontUseNativeDialog);
-   mplayer->setMedia(QUrl::fromLocalFile(video_location));
+                                                   "/home/apaul/Videos", tr("Video-Files (*)"),0,QFileDialog::DontUseNativeDialog);
+    mplayer->setMedia(QUrl::fromLocalFile(video_location));
+    QRect rect1(0,0,1366,768);
+    ui->horizontalLayout->setGeometry(rect1);
     mplayer->play();
 }
 
@@ -77,7 +79,7 @@ void player::on_ts_clicked()
         QString image_name = "image_" + QString::number(image_no) + ".jpg";
 
         originalPixmap = QPixmap(); // clear image for low memory situations
-                                    // on embedded devices.
+        // on embedded devices.
         QScreen *screen = QGuiApplication::primaryScreen();
         if (screen)
             originalPixmap = screen->grabWindow(0);
@@ -97,8 +99,8 @@ void player::on_ts_clicked()
     else
     {
         QMessageBox::information(this, tr("BUS PIS"),
-                                       tr("You are viewing a slice right now"),
-                                       QMessageBox::Ok);
+                                 tr("You are viewing a slice right now"),
+                                 QMessageBox::Ok);
     }
 }
 
@@ -153,8 +155,8 @@ void player::onListWidgetItemClicked(QListWidgetItem *item)
     else
     {
         QMessageBox::information(this, tr("BUS PIS"),
-                                       tr("Please reopen original video to access bookmarks"),
-                                       QMessageBox::Ok);
+                                 tr("Please reopen original video to access bookmarks"),
+                                 QMessageBox::Ok);
     }
 }
 
@@ -195,20 +197,20 @@ void player::on_pb_clicked()
             minutes = 0;
         bookmark_name = QString::number(minutes) + " mins " + QString::number(seconds) + " secs " + QString::number(msecs) + " msecs ";
         ui->listWidget->addItem(bookmark_name);
-   }
-   else
-   {
-       QMessageBox::information(this, tr("BUS PIS"),
-                                      tr("You are viewing a slice right now"),
-                                      QMessageBox::Ok);
-   }
+    }
+    else
+    {
+        QMessageBox::information(this, tr("BUS PIS"),
+                                 tr("You are viewing a slice right now"),
+                                 QMessageBox::Ok);
+    }
 }
 
 void player::positionChanged(qint64 progress)
 {
     //MOVING THE SLIDER FOR SEEKING IN VIDEO
     if (!ui->horizontalSlider->isSliderDown()) {
-                ui->horizontalSlider->setValue(progress / 1000);
+        ui->horizontalSlider->setValue(progress / 1000);
     }
 }
 
@@ -306,8 +308,8 @@ void player::on_ob_clicked()
     if(mplayer->isVideoAvailable())
     {
         QMessageBox::information(this, tr("BUS PIS"),
-                                       tr("Please make sure to open Bookmarks for the same video"),
-                                       QMessageBox::Ok);
+                                 tr("Please make sure to open Bookmarks for the same video"),
+                                 QMessageBox::Ok);
 
         QString bfile = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                      "/home/apaul/Downloads/Pictures-Bookmarks", tr("Text-Files (*.txt)"),0,QFileDialog::DontUseNativeDialog);
@@ -330,8 +332,8 @@ void player::on_ob_clicked()
     else
     {
         QMessageBox::warning(this, tr("BUS PIS"),
-                                       tr("No Video Open"),
-                                       QMessageBox::Ok);
+                             tr("No Video Open"),
+                             QMessageBox::Ok);
     }
 }
 
@@ -373,17 +375,17 @@ void player::on_oss_clicked()
         msgBox.setDefaultButton(QMessageBox::Yes);
         int ret = msgBox.exec();
         switch (ret) {
-          case QMessageBox::Yes:
-              mplayer->deleteLater();
-              mplayer = new QMediaPlayer;
-              connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
-              connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
-              connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
-              mplayer->setVideoOutput(videoWidget);
-              break;
-          default:
-              // should never be reached
-              break;
+        case QMessageBox::Yes:
+            mplayer->deleteLater();
+            mplayer = new QMediaPlayer;
+            connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
+            connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
+            connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
+            mplayer->setVideoOutput(videoWidget);
+            break;
+        default:
+            // should never be reached
+            break;
         }
     }
 }
@@ -442,17 +444,17 @@ void player::on_ovs_clicked()
         msgBox.setDefaultButton(QMessageBox::Yes);
         int ret = msgBox.exec();
         switch (ret) {
-          case QMessageBox::Yes:
-              mplayer->deleteLater();
-              mplayer = new QMediaPlayer;
-              connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
-              connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
-              connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
-              mplayer->setVideoOutput(videoWidget);
-              break;
-          default:
-              // should never be reached
-              break;
+        case QMessageBox::Yes:
+            mplayer->deleteLater();
+            mplayer = new QMediaPlayer;
+            connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
+            connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
+            connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
+            mplayer->setVideoOutput(videoWidget);
+            break;
+        default:
+            // should never be reached
+            break;
         }
     }
 }
@@ -468,8 +470,8 @@ void player::on_svs_clicked()
     else
     {
         QMessageBox::warning(this, tr("BUS PIS"),
-                                       tr("No Video Open"),
-                                       QMessageBox::Ok);
+                             tr("No Video Open"),
+                             QMessageBox::Ok);
     }
 
 }
@@ -495,16 +497,16 @@ void player::on_evs_clicked()
         if(seconds > 9)
         {
             if(minutes > 9)
-               slice_start_time = "00:" + QString::number(minutes) + ":" + QString::number(seconds);
+                slice_start_time = "00:" + QString::number(minutes) + ":" + QString::number(seconds);
             else
-               slice_start_time = "00:0" + QString::number(minutes) + ":" + QString::number(seconds);
+                slice_start_time = "00:0" + QString::number(minutes) + ":" + QString::number(seconds);
         }
         else
         {
             if(minutes > 9)
-               slice_start_time = "00:" + QString::number(minutes) + ":0" + QString::number(seconds);
+                slice_start_time = "00:" + QString::number(minutes) + ":0" + QString::number(seconds);
             else
-               slice_start_time = "00:0" + QString::number(minutes) + ":0" + QString::number(seconds);
+                slice_start_time = "00:0" + QString::number(minutes) + ":0" + QString::number(seconds);
         }
 
         seconds = slice_end_position / 1000;
@@ -514,16 +516,16 @@ void player::on_evs_clicked()
         if(seconds > 9)
         {
             if(minutes > 9)
-               slice_end_time = "00:" + QString::number(minutes) + ":" + QString::number(seconds);
+                slice_end_time = "00:" + QString::number(minutes) + ":" + QString::number(seconds);
             else
-               slice_end_time = "00:0" + QString::number(minutes) + ":" + QString::number(seconds);
+                slice_end_time = "00:0" + QString::number(minutes) + ":" + QString::number(seconds);
         }
         else
         {
             if(minutes > 9)
-               slice_end_time = "00:" + QString::number(minutes) + ":0" + QString::number(seconds);
+                slice_end_time = "00:" + QString::number(minutes) + ":0" + QString::number(seconds);
             else
-               slice_end_time = "00:0" + QString::number(minutes) + ":0" + QString::number(seconds);
+                slice_end_time = "00:0" + QString::number(minutes) + ":0" + QString::number(seconds);
         }
 
         QString slice_folder = folderpath + slice_name;
@@ -548,5 +550,5 @@ void player::enterEvent(QEvent *ev)
 
 void player::leaveEvent(QEvent *ev)
 {
-      QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 }
