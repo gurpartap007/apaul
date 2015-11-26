@@ -2,13 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlError>
-#include <QSqlTableModel>
-#include <QDebug>
-#include <QStringList>
 
 namespace Ui {
 class MainWindow;

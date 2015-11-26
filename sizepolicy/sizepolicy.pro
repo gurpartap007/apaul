@@ -1,14 +1,14 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-10-30T12:25:39
+# Project created by QtCreator 2015-11-06T13:44:16
 #
-#------------------------------------------------
+#-------------------------------------------------
 
-QT       += core gui multimedia multimediawidgets serialport network sql
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = database_basi
+TARGET = sizepolicy
 TEMPLATE = app
 
 
