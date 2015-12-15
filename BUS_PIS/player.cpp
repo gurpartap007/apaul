@@ -4,18 +4,70 @@
 #include <QScreen>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QDesktopWidget>
 
 qint64 current_position = 0,bookmark_position = 0,bm_orig_count = 0,img_orig_count = 0;
 bool image_view_click = 0,slice_item_click = 0;
 QString video_location;
-qint64 slice_start_position = 0, slice_end_position = 0,slice_orig_count = 0;
 
+QString slice_folder;
+qint64 slice_start_position = 0, slice_end_position = 0,slice_orig_count = 0;
+bool video_available=false;
+bool  video_fullscreen=true;
 player::player(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::player)
 {
     ui->setupUi(this);
-    folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
+    model = new QFileSystemModel(this);
+ QDesktopWidget screen_player;
+
+  //  ui->listView->hide();
+    if(screen_player.width() == 1920)
+    {
+        this->setStyleSheet("QPushButton {font: 30pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+        ui->listView->setStyleSheet("QListView {font: 44pt \"Arial\";}QListView{ background-color: rgb(179, 179, 179); }");
+    }
+
+   else if(screen_player.width() == 1366)
+    {
+        this->setStyleSheet("QPushButton {font: 22pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+        ui->listView->setStyleSheet("QListView {font: 36pt \"Arial\";}QListView{ background-color: rgb(179, 179, 179); }");
+    }
+    else  if(screen_player.width() == 1360)
+    {
+        this->setStyleSheet("QPushButton {font: 22pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+        ui->listView->setStyleSheet("QListView {font: 36pt \"Arial\";}QListView{ background-color: rgb(179, 179, 179); }");
+       }
+    else if(screen_player.width() == 1024)
+    {
+        this->setStyleSheet("QPushButton {font: 16pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+        ui->listView->setStyleSheet("QListView {font: 32pt \"Arial\";}QListView{ background-color: rgb(179, 179, 179); }");
+    }
+    else if(screen_player.width() == 800)
+    {
+        this->setStyleSheet("QPushButton {font: 12pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+        ui->listView->setStyleSheet("QListView {font: 28pt \"Arial\";}QListView{ background-color: rgb(179, 179, 179); }");
+    }
+   ////////////////////////////////////  RESIZING OF PLAYER BUTTONS ACCORDING TO RESOLTION   //////////////////////////
+    ui->cl->setMinimumWidth(screen_player.width()/6); // CLEAR LOG BUTTON
+    ui->cl->setMaximumHeight(screen_player.height()/10);
+    ui->evs->setMinimumWidth(screen_player.width()/6); // END VIDEO SLICE BUTTON
+    ui->evs->setMaximumHeight(screen_player.height()/10);
+    ui->pause->setMinimumWidth(screen_player.width()/6); // VIDEO PAUSE BUTTON
+    ui->pause->setMaximumHeight(screen_player.height()/10);
+    ui->pb->setMinimumWidth(screen_player.width()/6); // PLACE BOOKMARK BUTTON
+    ui->pb->setMaximumHeight(screen_player.height()/10);
+    ui->play->setMaximumSize(screen_player.width()/6,screen_player.height()/10); // VIDEO PLAY BUTTON
+    ui->ovf->setMinimumWidth(screen_player.width()/6); // OPEN VIDEO FILES BUTTON
+    ui->ovf->setMaximumHeight(screen_player.height()/10);
+    ui->sb->setMinimumWidth(screen_player.width()/6); // SAVE SESSION BUTTON
+    ui->sb->setMaximumHeight(screen_player.height()/10);
+    ui->svs->setMaximumSize(screen_player.width()/6,screen_player.height()/10); // SAVE VIDEO SLICE BUTTON
+    ui->ts->setMinimumWidth(screen_player.width()/6);// TAKE VIDEO SCREENSHOT BUTTON
+    ui->ts->setMaximumHeight(screen_player.height()/10);
+    //////////////////////////////////  RESIZING OF BUTTONS ///////////////////////////////////////////////////////////////////
+    folderpath = "/home/apaul/Pictures/Pictures-Bookmarks/";
     image_no = 1;
     slice_no = 1;
 
@@ -25,8 +77,9 @@ player::player(QWidget *parent) :
     imageObject = new QImage();
     mplayer = new QMediaPlayer;
 
-    video_dialog = new QFileDialog(this);
-
+    video_dialog = new QFileDialog(this,Qt::FramelessWindowHint);
+    // this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    // this->setWindowFlags(Qt::WindowStaysOnTopHint);
     connect(mplayer, SIGNAL(positionChanged(qint64)), SLOT(positionChanged(qint64)));
     connect(mplayer, SIGNAL(durationChanged(qint64)), SLOT(durationChanged(qint64)));
     connect(ui->horizontalSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)));
@@ -34,9 +87,12 @@ player::player(QWidget *parent) :
     //VIDEO WIDGET TO VIEW SAVED VIDEO
     videoWidget = new VideoWidget();
     videoWidget->setAspectRatioMode(Qt::IgnoreAspectRatio);
+    //videoWidget->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    //  videoWidget->setMaximumSize(screen_player.width()*3/5,screen_player.height()*1/3);
+
     mplayer->setVideoOutput(videoWidget);
 
-    ui->horizontalLayout->addWidget(videoWidget);
+ //  ui->horizontalLayout->addWidget(videoWidget);
 
     connect(ui->listWidget_3, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(onListWidget_3ItemClicked(QListWidgetItem*)));
@@ -48,31 +104,78 @@ player::player(QWidget *parent) :
 
 player::~player()
 {
+    delete model;
+    mSlicingProcess->deleteLater();
+    delete video_dialog;
+    delete videoWidget;
+    delete mplayer;
     delete ui;
 }
 
 void player::on_ovf_clicked()
 {
     //OPENING VIDEO FILE
+    if(!videoWidget->isHidden())
+    videoWidget->hide();
+    if(ui->listView->isHidden())
+        ui->listView->show();
     slice_item_click = 0;
+    QStringList video_files;
     folderpath = "/home/apaul/Downloads/Pictures-Bookmarks/";
+
+    //////////////////////  LISTVIEW CODE //////////////////////////////////////////
+    qDebug() << "INSIDE PLAYER" << player_video_location;
+  //  model->setRootPath(player_video_location);
+     model->setRootPath(player_video_location);
+    model->setReadOnly(false);
+    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDot);
+    model->setNameFilters(QStringList{ "*" });
+    model->setNameFilterDisables(false);
+    ui->listView->setModel(model);
+    ui->listView->setViewMode(QListView::ListMode);
+    ui->listView->setRootIndex(model->index(model->rootPath()));
+
+    ///////////////////// LISTVIEW  CODE /////////////////////////////////////////
 
     QDate date = QDate::currentDate();
     QTime time = QTime::currentTime();
     QString dtstring = date.toString() + "-" + time.toString() + "/";
     folderpath = folderpath + dtstring;
     QDir dir(folderpath);
-    video_dialog->setGeometry(0,0,1366,768);
-    video_location = video_dialog->getOpenFileName(this, tr("Open File"),
-                                                   "/home/apaul/Videos", tr("Video-Files (*)"),0,QFileDialog::DontUseNativeDialog);
-    mplayer->setMedia(QUrl::fromLocalFile(video_location));
-    QRect rect1(0,0,1366,768);
-    ui->horizontalLayout->setGeometry(rect1);
-    mplayer->play();
+//////////////////////////////////////  VIDEO OPENING DIALOG  ///////////////////////////////////////////////
+    /*
+    video_dialog->setModal(true);
+    video_dialog->setParent(this);
+    //video_dialog->setOption(QFileDialog::DontUseNativeDialog,true);
+    //video_dialog->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    video_dialog->exec();
+    //video_dialog->raise();
+    //video_dialog->showMaximized();
+    video_files = video_dialog->selectedFiles();
+    //video_files = video_dialog->selectedUrls();
+    qDebug() << "debugging" << video_dialog->selectedUrls();
+    qDebug() << video_files.at(0);
+    //video_files << video_dialog->selectedFiles();
+    //qDebug() << video_files;
+    //video_dialog->setGeometry(0,0,1366,768);
+    //video_location = video_dialog->getOpenFileName(this, tr("Open File"),
+    //                     "/home/apaul/Videos", tr("Video-Files (*)"),0,QFileDialog::DontUseNativeDialog);*/
+  //  mplayer->setMedia(QUrl::fromLocalFile(video_files.at(0)));
+    //  if(mplayer->isVideoAvailable())
+    {
+    //    mplayer->play();
+    //    video_available=true;
+    }
+    // QRect rect1(0,0,800,300);
+    //ui->horizontalLayout->setGeometry(rect1);
+
 }
 
 void player::on_ts_clicked()
 {
+    QDesktopWidget screenshot;
+    QDir dir(folderpath);
+    dir.mkpath(folderpath);
     //TAKING A SNAPSHOT
     if(mplayer->isVideoAvailable() && !slice_item_click)
     {
@@ -83,14 +186,19 @@ void player::on_ts_clicked()
         QScreen *screen = QGuiApplication::primaryScreen();
         if (screen)
             originalPixmap = screen->grabWindow(0);
+        QRect test_geometry(ui->line_3->geometry());
+    qDebug() << ui->line_3->geometry();
+    qDebug() << test_geometry;
+    qDebug() << videoWidget->geometry();
+       QRect rect(videoWidget->x(),(screenshot.height()*1/4)+13,videoWidget->width(),videoWidget->height());
+       qDebug() << "Rect ........."<< rect;
+     QPixmap cropped = originalPixmap.copy(rect);
 
-        QRect rect(420,230,1489,599);
-        QPixmap cropped = originalPixmap.copy(rect);
+       *imageObject = cropped.toImage();
+        // *imageObject = originalPixmap.toImage();
+        image_name =  image_name;
+        imageObject->save(folderpath+ image_name);
 
-        *imageObject = cropped.toImage();
-
-        //image_name = folderpath + image_name;
-        imageObject->save(folderpath + image_name);
 
         ui->listWidget_2->addItem(image_name);
 
@@ -111,8 +219,8 @@ void player::onListWidget_3ItemClicked(QListWidgetItem *item)
     slice_item_click = 1;
 
     QString slice_name = item->text();
-
-    mplayer->setMedia(QUrl::fromLocalFile(folderpath + slice_name));
+   mplayer->stop();
+    mplayer->setMedia(QUrl::fromLocalFile(  slice_folder+slice_name));
     mplayer->play();
 }
 
@@ -127,7 +235,7 @@ void player::onListWidget_2ItemClicked(QListWidgetItem *item)
 
     QString image_name = item->text();
 
-    mplayer->setMedia(QUrl::fromLocalFile(folderpath + image_name));
+    mplayer->setMedia(QUrl::fromLocalFile(folderpath+ image_name));
     mplayer->play();
 }
 
@@ -481,6 +589,8 @@ void player::on_evs_clicked()
     //SET END OF VIDEO SLICE
     if(!ui->svs->isEnabled())
     {
+        QString slice_final_name;
+       slice_folder = "/home/apaul/Downloads/saved_video_slices/";
         QString program = "/usr/bin/ffmpeg";
         QStringList arguments;
 
@@ -488,7 +598,7 @@ void player::on_evs_clicked()
         QString slice_start_time,slice_end_time,total_command;
         qint16 minutes,seconds;
 
-        QString slice_name = "slice_" + QString::number(slice_no) + ".avi";
+        QString slice_name = "slice_" + QString::number(slice_no) + ".mp4";
 
         seconds = slice_start_position / 1000;
         minutes = seconds / 60;
@@ -527,9 +637,10 @@ void player::on_evs_clicked()
             else
                 slice_end_time = "00:0" + QString::number(minutes) + ":0" + QString::number(seconds);
         }
-
-        QString slice_folder = folderpath + slice_name;
-        arguments << "-i" << video_location << "-ss" << slice_start_time << "-to" << slice_end_time << "-c" << "copy" << slice_folder;
+        QDir dir(slice_folder);
+        dir.mkpath(slice_folder);
+        slice_final_name = slice_folder + slice_name;
+        arguments << "-i" << video_location << "-ss" << slice_start_time << "-to" << slice_end_time << "-c" << "copy" << "-y" << slice_final_name;
 
         mSlicingProcess->setProcessChannelMode(QProcess::MergedChannels);
         mSlicingProcess->start(program, arguments);
@@ -545,10 +656,120 @@ void player::on_evs_clicked()
 void player::enterEvent(QEvent *ev)
 {
     QApplication::setOverrideCursor( QCursor(Qt::PointingHandCursor));
+    /*  if(video_available && video_fullscreen )
+    {
+    ui->horizontalSlider->hide();
+    ui->cl->hide();
+    ui->evs->hide();
+    ui->ovf->hide();
+    ui->ts->hide();
+    ui->pause->hide();
+    ui->play->hide();
+    ui->pb->hide();
+    ui->sb->hide();
+    ui->svs->hide();
+    ui->line_2->hide();
+    video_fullscreen=false;
+    }
+    else
+    {
+        ui->horizontalSlider->show();
+        ui->cl->show();
+        ui->evs->show();
+        ui->ovf->show();
+        ui->ts->show();
+        ui->pause->show();
+        ui->play->show();
+        ui->pb->show();
+        ui->sb->show();
+        ui->svs->show();
+        ui->line_2->show();
+        video_fullscreen=true;
+    }*/
 
 }
 
 void player::leaveEvent(QEvent *ev)
 {
     QApplication::restoreOverrideCursor();
+}
+
+void player::mousePressEvent(QEvent *ev)
+{
+    qDebug()<< "showed MOuse Release Event";
+    if(video_fullscreen)
+    {
+        ui->horizontalSlider->hide();
+        ui->cl->hide();
+        ui->evs->hide();
+        ui->ovf->hide();
+        ui->ts->hide();
+        ui->pause->hide();
+        ui->play->hide();
+        ui->pb->hide();
+        ui->sb->hide();
+        ui->svs->hide();
+        ui->line_2->hide();
+        video_fullscreen=false;
+    }
+    else
+    {
+        ui->horizontalSlider->show();
+        ui->cl->show();
+        ui->evs->show();
+        ui->ovf->show();
+        ui->ts->show();
+        ui->pause->show();
+        ui->play->show();
+        ui->pb->show();
+        ui->sb->show();
+        ui->svs->show();
+        ui->line_2->show();
+        video_fullscreen=true;
+    }
+}
+
+void player::on_listView_clicked(const QModelIndex &index)
+{
+
+
+    QDir temporary;
+if(index.row()==0)
+{
+temporary.setPath(player_video_location);
+temporary.cdUp();
+  //  qDebug() << model->fileInfo(index).absoluteDir();
+qDebug() << temporary.absolutePath();
+model->setRootPath(temporary.absolutePath());
+ui->listView->setModel(model);
+   ui->listView->setRootIndex(model->index(model->rootPath()));
+return ;
+}
+//temporary.setPath(model->fileInfo(index).absoluteFilePath());
+if(model->fileInfo(index).isDir())
+{
+    qDebug() << model->fileInfo(index).absoluteFilePath();
+    model->setRootPath(model->fileInfo(index).absoluteFilePath());
+    ui->listView->setModel(model);
+       ui->listView->setRootIndex(model->index(model->rootPath()));
+       return ;
+}
+    video_location = model->fileInfo(index).absoluteFilePath();
+    mplayer->setMedia(QUrl::fromLocalFile(video_location));
+    ui->listView->hide();
+   ui->horizontalLayout->addWidget(videoWidget);
+   if(videoWidget->isHidden())
+       videoWidget->show();
+    mplayer->play();
+if(mplayer->state() == QMediaPlayer::StoppedState)
+{
+
+    QMessageBox::warning(this, tr("BUS PIS"),
+                         tr("Not Valid video file "),
+                         QMessageBox::Ok);
+     //ui->listView->setRootIndex(model->index(model->rootPath()));
+     return;
+}
+
+  // mplayer->play();
 }

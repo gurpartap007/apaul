@@ -23,20 +23,20 @@ void PreRecorded::on_play_clicked()
 {
     switch(ui->listWidget->currentRow())
     {
-        case 0:
-            pre_recorded = "PR1";
-            emit this->dis_prr_packet(25);
-            break;
-        case 1:
-            pre_recorded = "PR2";
-            emit this->dis_prr_packet(25);
-            break;
-        case 2:
-            pre_recorded = "PR3";
-            emit this->dis_prr_packet(25);
-            break;
-        default:
-            break;
+    case 0:
+        pre_recorded = "PR1";
+        emit this->dis_prr_packet(25);
+        break;
+    case 1:
+        pre_recorded = "PR2";
+        emit this->dis_prr_packet(25);
+        break;
+    case 2:
+        pre_recorded = "PR3";
+        emit this->dis_prr_packet(25);
+        break;
+    default:
+        break;
     }
 }
 

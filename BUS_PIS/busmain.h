@@ -2,6 +2,7 @@
 #define BUSMAIN_H
 
 #include <QMainWindow>
+#include <QDesktopWidget>
 #include <QStackedWidget>
 #include <QThread>
 #include <QStatusBar>
@@ -47,6 +48,7 @@ public:
     ~BusMain();
     Ui::BusMain *ui;
     QList<MyThread*> threads;
+
     ReverseCamera *revcam;
     Home *hom;
     Camera *cam;
@@ -94,6 +96,7 @@ private slots:
     void socket_check();
     void getter();
     void setter();
+    void delay_camera();
 
 signals:
     void finished();
@@ -117,6 +120,18 @@ private:
     QMediaPlaylist *playlist;
     QTimer *timer;
 };
-
+class delay : public QThread
+{
+public:
+static void sleep(unsigned long secs) {
+QThread::sleep(secs);
+}
+static void msleep(unsigned long msecs) {
+QThread::msleep(msecs);
+}
+static void usleep(unsigned long usecs) {
+QThread::usleep(usecs);
+}
+};
 
 #endif // BUSMAIN_H

@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QFileDialog>
+#include <QDesktopWidget>
 
 enum Path_Route_Table
 {
@@ -43,12 +44,42 @@ extern QString path_code, route_no, destination_code, gps_file, path_description
 int entry_time,station_no = 0;
 QStringList datalist,datalist_one,audio_list;
 QString query_text;
-
+QFont newFont1;
 running_route::running_route(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::running_route)
 {
     ui->setupUi(this);
+    QDesktopWidget screen_running_route;
+    if(screen_running_route.width() == 1920)
+        this->setStyleSheet("QPushButton {font: 30pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+    else if(screen_running_route.width() == 1366)
+    {
+        newFont1.setFamily("sans Serif");
+        newFont1.setPointSize(48);
+        this->setStyleSheet("QPushButton {font: 24pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+    }
+    else if(screen_running_route.width() == 1360)
+    {
+        newFont1.setFamily("Sans Serif");
+        newFont1.setPointSize(48);
+
+        this->setStyleSheet("QPushButton {font: 24pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
+    }
+    else if(screen_running_route.width() == 800)
+    {
+        newFont1.setFamily("Sans Serif");
+        newFont1.setPointSize(30);
+        this->setStyleSheet("QPushButton {font: 12pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }QListWidget {font: 36pt \"Arial\";}");
+    }
+    else if(screen_running_route.width() == 1024)
+    {
+        newFont1.setFamily("Sans Serif");
+        newFont1.setPointSize(40);
+        this->setStyleSheet("QPushButton {font: 17pt \"Arial\";}QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); };QListWidget {font: 42pt \"Arial\";}");
+        qDebug() << screen_running_route.width();
+        qDebug() << "Inside 22 POINT ";
+    }
 }
 
 running_route::~running_route()
@@ -58,9 +89,11 @@ running_route::~running_route()
 
 void running_route::initialise_fields()
 {
+    QDesktopWidget screen_route;
+    //this->setStyleSheet("background-color: rgb(202, 244, 250);");
     //INITIALISE FIELDS TO GIVE ANNOUNCEMENT AND SKIP OPTION
     emit this->Journey_Start(4);
-
+    //this->setMaximumSize(screen_route.width(),screen_route.height()*2/3);
     skipButton = new QPushButton("Skip");
     announceButton = new QPushButton("Announcement");
     connect(skipButton, SIGNAL(released()), this, SLOT (skip_event()));
@@ -69,6 +102,7 @@ void running_route::initialise_fields()
     widgetLayout = new QHBoxLayout;
     widgetText = new QLabel;
     ui->label_2->setText(route_no);
+    ui->label_2->setStyleSheet("color: rgb(0,0, 0);");
     query_text = "select stop from stop_master_table where stop_code = '" + destination_code + "'" ;
     QSqlQuery query(query_text);
     query.first();
@@ -92,12 +126,14 @@ void running_route::on_et_clicked()
 
 void running_route::skip_event()
 {
+
     //SKIP STATION
     int rows = ui->listWidget->count();
     if(rows == 1)
         return;
     QListWidgetItem *currentItem = ui->listWidget->item(0);
     currentItem->setText(widgetText->text());
+    //currentItem->setText("hello");
     if(rows >= 3)
     {
         QListWidgetItem *currentItem1 = ui->listWidget->item(2);
@@ -180,7 +216,7 @@ void running_route::database_filling()
         route_path.Stops[station_no].info.approaching_peri = datalist[APP_PERI].toInt();
         route_path.Stops[station_no].info.entry_peri = datalist[ENTRY_PERI].toInt();
         route_path.Stops[station_no].info.exit_peri = datalist[EXIT_PERI].toInt();
-
+        QString  test_query = "select * from stop_master_table where stop_code = '" + datalist[STOP_CODE] + "'";
         QSqlQuery query2("select * from stop_master_table where stop_code = '" + datalist[STOP_CODE] + "'");
         query2.first();
         datalist_one.clear();
@@ -195,27 +231,24 @@ void running_route::database_filling()
         QListWidgetItem *new_item = new QListWidgetItem;
         if(entry_time == 1)
         {
-            QFont newFont1("Sans Serif",60);
+
+
             widgetText->setText(datalist_one[STOP_NAME]);
             widgetText->setFont(newFont1);
-
-            QFont newFont("Sans Serif",40);
-            skipButton->setFont(newFont);
+            //  QFont newFont("Sans Serif",36);
+            skipButton->setFont(newFont1);
             skipButton->setStyleSheet("QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
-            announceButton->setFont(newFont);
+            announceButton->setFont(newFont1);
             announceButton->setStyleSheet("QPushButton{ background-color: rgb(179, 179, 179); }QPushButton:pressed{background-color: rgb(100, 100, 100); }");
-
             widgetLayout->addWidget(widgetText);
             widgetLayout->addWidget(skipButton);
-            widgetLayout->setAlignment(skipButton,Qt::AlignRight);
+            widgetLayout->setAlignment(skipButton,Qt::AlignLeft);
             widgetLayout->addWidget(announceButton);
-            widgetLayout->setAlignment(announceButton,Qt::AlignRight);
+            widgetLayout->setAlignment(announceButton,Qt::AlignLeft);
             widgetLayout->addStretch();
             widgetLayout->setSizeConstraint(QLayout::SetMaximumSize);
-
             widget->setLayout(widgetLayout);
-            widget->setStyleSheet("background-color: rgb(148, 255, 124);");
-
+            widget->setStyleSheet("background-color: rgb(255, 148, 124);");
             ui->listWidget->addItem(new_item);
             ui->listWidget->setItemWidget(new_item,widget);
         }
@@ -237,7 +270,7 @@ void running_route::on_rf_clicked()
 {
     //OPEN GPS SIMULATION FILE
     gps_file = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                  "/home/apaul/Downloads", tr("GPS-Files (*.txt)"),0,QFileDialog::DontUseNativeDialog);
+                                            "/home/apaul/Downloads", tr("GPS-Files (*.txt)"),0,QFileDialog::DontUseNativeDialog);
     if(!gps_file.isEmpty())
         emit this->gps_file_selected();
 }

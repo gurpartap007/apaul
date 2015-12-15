@@ -4,6 +4,7 @@
 #include <QVideoEncoderSettings>
 #include <QTimer>
 #include <QPainter>
+#include <QDesktopWidget>
 
 bool maxMode = false;
 
@@ -11,18 +12,22 @@ Camera::Camera(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Camera)
 {
+    QDesktopWidget screen_camera;
     //MAKING 4 INDIVIDUAL PLAYERS FOR EACH CAMERA
+    this->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    this->setMaximumSize(screen_camera.width(),screen_camera.height()*3/4);
     player1 = new QMediaPlayer;
     player2 = new QMediaPlayer;
     player3 = new QMediaPlayer;
     player4 = new QMediaPlayer;
 
     //ASSIGNING URLTO THE PLAYER
-   player1->setMedia(QUrl("file:////home/apaul/Downloads/videoplayback"));
-   player2->setMedia(QUrl("file:////home/apaul/Videos/fxguidetv-ep204.mp4"));
-   player3->setMedia(QUrl("file:////home/apaul/Videos/fxguidetv-ep204.mp4"));
-   player4->setMedia(QUrl("file:////home/apaul/Downloads/videoplayback"));
-   // player3->setMedia(QUrl("v4l2://///dev/video0"));
+   player1->setMedia(QUrl("v4l2:///dev/video1"));
+   //  player1->setMedia(QUrl("file:////home/apaul/Videos/making_of_lord_of_rings.mp4"));
+    player2->setMedia(QUrl("file:////home/apaul/Downloads/bapu.mp4"));
+    player3->setMedia(QUrl("file:////home/apaul/Videos/making_of_lord_of_rings.mp4"));
+    player4->setMedia(QUrl("file:////home/apaul/Videos/fxguidetv-ep204.mp4"));
+    // player3->setMedia(QUrl("v4l2://///dev/video0"));
     //  player4->setMedia(QUrl("v4l2:///dev/video0"));
 
     ui->setupUi(this);
@@ -52,12 +57,20 @@ Camera::Camera(QWidget *parent) :
     player4->setVideoOutput(videoWidget4);
     connect(videoWidget4,SIGNAL(goto_fullscreen()),this,SLOT(widget4_fullscreen()));
     connect(videoWidget4,SIGNAL(goto_normal()),this,SLOT(widget4_normal()));
+    videoWidget1->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    videoWidget1->setMinimumSize(screen_camera.width()*1/2,screen_camera.height()*1/3);
+    videoWidget2->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    videoWidget2->setMinimumSize(screen_camera.width()*1/2,screen_camera.height()*1/3);
+    videoWidget3->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    videoWidget3->setMinimumSize(screen_camera.width()*1/2,screen_camera.height()*1/3);
+    videoWidget4->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    videoWidget4->setMinimumSize(screen_camera.width()*1/2,screen_camera.height()*1/3);
 
     //ADDING WIDGETS TO SEPARATE LINEAR LAYOUTS
-    ui->Box1->addWidget(videoWidget1);
-    ui->Box1->addWidget(videoWidget2);
-    ui->Box2->addWidget(videoWidget3);
-    ui->Box2->addWidget(videoWidget4);
+    ui->box1->addWidget(videoWidget1);
+    ui->box1->addWidget(videoWidget2);
+    ui->box2->addWidget(videoWidget3);
+    ui->box2->addWidget(videoWidget4);
 
     //MAKING WIDGET UPDATE ENABLED BECAUSE WE NEED TO SHOW INFORMATION IN A LABEL BOX ALONG WITH VIDEO
     videoWidget1->setUpdatesEnabled(true);
@@ -93,8 +106,11 @@ Camera::Camera(QWidget *parent) :
     //PLAYING THE VIDEO
     player1->play();
     player2->play();
+  //  player2->setVolume(0);
     player3->play();
+    player3->setVolume(0);
     player4->play();
+    player4->setVolume(0);
 }
 
 Camera::~Camera()
@@ -171,8 +187,3 @@ void Camera::widget4_normal()
     videoWidget2->show();
     videoWidget3->show();
 }
-
-
-
-
-

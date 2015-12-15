@@ -12,8 +12,8 @@ enum device_enum
 //#######################################################################################
 //			TYPEDEF AVAILABLE IN THE LIBRARY
 //#######################################################################################
-typedef unsigned char ubyte;
-typedef char sbyte;
+typedef    unsigned char ubyte;
+typedef    char sbyte;
 typedef	unsigned short uinteger;
 typedef	int sinteger;
 typedef	unsigned long uword;
@@ -22,11 +22,11 @@ typedef	const unsigned char urombyte;
 typedef	const char srombyte;
 typedef	const unsigned short uromint;
 typedef	const int sromint;
-typedef urombyte *const uromptr;
-typedef srombyte *const sromptr;
-typedef ubyte *const uramptr;
-typedef sbyte *const sramptr;
-typedef long double lword;
+typedef    urombyte *const uromptr;
+typedef    srombyte *const sromptr;
+typedef    ubyte *const uramptr;
+typedef    sbyte *const sramptr;
+typedef    long double lword;
 
 #define	SIZE_GPS_RMC_MSG					(uinteger)96
 #define	DIG_STN_CODE						(uinteger)6
@@ -35,10 +35,10 @@ typedef long double lword;
 #define	DIG_MAX_PATH_CODE_LEN				(uinteger)6
 #define	MAX_DEV_CODE_LEN                    (uinteger)6
 #define	MAX_DEV_DESC_LEN                    (uinteger)96
-#define MAX_DEVICES_IN_SYSTEM               (uinteger)20
+#define   MAX_DEVICES_IN_SYSTEM               (uinteger)20
 #define	DIG_BUS_NAME						(uinteger)48
 #define	DIG_STN_NAME						(uinteger)96
-#define DIG_STN_TYPE                        (uinteger)96
+#define   DIG_STN_TYPE                        (uinteger)96
 #define	MAX_STNS_PER_BUS    				(uinteger)96
 #define	STX_STR								"STX"
 #define	ETX_STR								"ETX"
@@ -54,9 +54,8 @@ typedef long double lword;
 #define	L_FRAME_INIT						(uinteger)(L_STX+L_FR_LEN+L_SRC_ID+L_DEST_ID+L_FUNC_CODE)
 #define	L_FRAME_LEN(DATA)					(uinteger)(L_STX+L_FR_LEN+L_SRC_ID+L_DEST_ID+L_FUNC_CODE+DATA+L_CRC+L_ETX)
 #define	L_DATA_LEN(FRAME)					(uinteger)(FRAME-L_STX-L_FR_LEN-L_SRC_ID-L_DEST_ID-L_FUNC_CODE-L_CRC-L_ETX)
-#define TOTAL_NO_OF_SECTION                 6
-#define TOTAL_NO_OF_PAGES                   10
-
+#define   TOTAL_NO_OF_SECTION                 6
+#define   TOTAL_NO_OF_PAGES                   10
 #define	KNOTS_TO_KMS_FACTOR					(float)1.852
 
 //#######################################################################################

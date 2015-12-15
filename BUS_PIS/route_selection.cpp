@@ -1,5 +1,7 @@
 #include "route_selection.h"
 #include "ui_route_selection.h"
+#include <QDesktopWidget>
+
 
 extern char display[20];
 extern char *ptr;
@@ -12,6 +14,16 @@ route_selection::route_selection(QWidget *parent) :
     ui(new Ui::route_selection)
 {
     ui->setupUi(this);
+    QDesktopWidget screen_route;
+    QSqlQuery test_query;
+    //   this->setGeometry(0,0,screen_route.width(),screen_route.height()*2/4);
+    //this->setMaximumSize(800,200);
+    ui->comboBox->setMaximumSize(screen_route.width()/3,screen_route.height()/12);
+    ui->lineEdit->setMaximumSize(screen_route.width()/8,screen_route.height()/12);
+    //ui->label->setFixedSize(screen_route.width()*1/4,screen_route.height()/10);
+    ui->tableView->setMaximumSize(screen_route.width(),this->height()*3/5);
+
+    //ui->stackedWidget->setFixedSize(screen_route.width(),500);
 
     //CONNECTING TO DATABASE
     //PICKING UP SQL STATEMENTS FROM SAVED FILE AND UPDATING DATABASE
@@ -28,38 +40,44 @@ route_selection::route_selection(QWidget *parent) :
 
     QFileInfo info("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
     QDateTime modifieddt = info.lastModified();
-
+    QString canonical_path;
+    canonical_path = info.absoluteFilePath();
+    qDebug() << canonical_path;
+    qDebug() << modifieddt;
     QDate moddate = modifieddt.date();
+    qDebug() << moddate;
     QTime modtime = modifieddt.time();
+    qDebug() << modtime;
     QDate currentdat = QDate::currentDate();
+    qDebug() << currentdat;
     QTime currenttim = QTime::currentTime();
-
-   if((currentdat >= moddate) && ((currenttim.minute() - modtime.minute()) < 10))
+    qDebug() << currenttim;
+    if(0)
+        //if((currentdat >= moddate) && ((currenttim.minute() - modtime.minute()) < 10))
     {
         QFile file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/working_route.txt");
-     /*  if(file.exists())
+        if(file.exists())
         {
             qDebug() << "file exist of database";
             file.open(QIODevice::ReadOnly | QIODevice::Text);
             QTextStream in(&file);
             while(!in.atEnd())  {
-               QString file_data = in.readLine();
-               QSqlQuery query(file_data,db);
-               //qDebug() << "executed a statement";
+                QString file_data = in.readLine();
+                QSqlQuery query(file_data,db);
+                //qDebug() << "executed a statement";
             }
-        }*/
+        }
     }
-   else
-        qDebug() << "File was modified more than 10 minutes ago";
+    qDebug() << "File was modified more than 10 minutes ago";
 
     //LISTING OF ALL ROUTES
     ui->comboBox->addItem("");
     QSqlQuery query1("select * from stop_master_table where stop_type = 'Destination'");
     while (query1.next()) {
-            QString data_name = query1.value(0).toString();
-            data_name = data_name + "-" + query1.value(1).toString();
-            ui->comboBox->addItem(data_name);
-        }
+        QString data_name = query1.value(0).toString();
+        data_name = data_name + "-" + query1.value(1).toString();
+        ui->comboBox->addItem(data_name);
+    }
 
     QSqlTableModel *model = new QSqlTableModel(this, db);
     model->setTable("path_master_table");
@@ -89,8 +107,11 @@ route_selection::route_selection(QWidget *parent) :
     connect(this, SIGNAL(lineedit_filter(QString)), proxyModel, SLOT(setFilterRegExp(QString)));
     connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(combobox_filtering(QString)));
     connect(this, SIGNAL(combobox_filter(QString)), proxyModel, SLOT(setFilterRegExp(QString)));
-
+    qDebug() << "ROUTE" << this->geometry();
     keyb = new keyboard;
+    //ui->stackedWidget->setFixedHeight(300);
+    keyb->setMaximumSize(screen_route.width(),320);
+
     ui->stackedWidget->addWidget(keyb);
     ui->stackedWidget->setCurrentWidget(keyb);
 
@@ -106,25 +127,25 @@ void route_selection::key_process(char value)
 {
     switch(value)
     {
-        //ROUTE IS SELECTED
-        case ENTER_CLICK:
-            row = ui->tableView->selectionModel()->currentIndex().row();
-            route_no = ui->tableView->model()->data(ui->tableView->model()->index(row,0)).toString();
-            path_description = ui->tableView->model()->data(ui->tableView->model()->index(row,2)).toString();
-            path_code = ui->tableView->model()->data(ui->tableView->model()->index(row,3)).toString();
-            source_code = ui->tableView->model()->data(ui->tableView->model()->index(row,4)).toString();
-            destination_code = ui->tableView->model()->data(ui->tableView->model()->index(row,5)).toString();
-            total_distance = ui->tableView->model()->data(ui->tableView->model()->index(row,6)).toString();
+    //ROUTE IS SELECTED
+    case ENTER_CLICK:
+        row = ui->tableView->selectionModel()->currentIndex().row();
+        route_no = ui->tableView->model()->data(ui->tableView->model()->index(row,0)).toString();
+        path_description = ui->tableView->model()->data(ui->tableView->model()->index(row,2)).toString();
+        path_code = ui->tableView->model()->data(ui->tableView->model()->index(row,3)).toString();
+        source_code = ui->tableView->model()->data(ui->tableView->model()->index(row,4)).toString();
+        destination_code = ui->tableView->model()->data(ui->tableView->model()->index(row,5)).toString();
+        total_distance = ui->tableView->model()->data(ui->tableView->model()->index(row,6)).toString();
 
-            if(row >= 0)
-                emit this->route_selected(30);
-            break;
-        default:
-            if(!selection)
-                ui->lineEdit->setText(display);
-            else
-                ui->comboBox->setCurrentText(display);
-            break;
+        if(row >= 0)
+            emit this->route_selected(30);
+        break;
+    default:
+        if(!selection)
+            ui->lineEdit->setText(display);
+        else
+            ui->comboBox->setCurrentText(display);
+        break;
     }
 }
 

@@ -9,9 +9,12 @@
 
 class FFmpegTask : public QWidget
 {
+
+
 public:
     explicit FFmpegTask(QWidget *parent = 0);
     ~FFmpegTask();
+    QString global_video_location;
     //void doConnect();
     //void session_splitter(QByteArray &received_data);
     //void rtp_to_frame_splitter(QByteArray &received_data);

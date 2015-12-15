@@ -7,6 +7,9 @@
 #include "videowidget.h"
 #include <QProcess>
 #include <QFileDialog>
+#include <QFileSystemModel>
+#include <QSortFilterProxyModel>
+#include <QErrorMessage>
 
 namespace Ui {
 class player;
@@ -18,10 +21,12 @@ class player : public QWidget
 
 public:
     explicit player(QWidget *parent = 0);
+    QString player_video_location;
     ~player();
     VideoWidget *videoWidget;
     QMediaPlayer *mplayer;
     QFileDialog *video_dialog;
+    QFileSystemModel *model;
 private slots:
     void on_ovf_clicked();
     void on_ts_clicked();
@@ -41,9 +46,12 @@ private slots:
     void on_ovs_clicked();
     void on_svs_clicked();
     void on_evs_clicked();
+    void on_listView_clicked(const QModelIndex &index);
+
 protected:
  void enterEvent(QEvent *ev);
  void leaveEvent(QEvent *ev);
+ void mousePressEvent(QEvent *ev);
 private:
     Ui::player *ui;
     QPixmap originalPixmap;

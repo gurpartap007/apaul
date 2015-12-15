@@ -25,13 +25,13 @@ void VideoWidget::mouseReleaseEvent(QMouseEvent *event)
     if(maxMode)
     {
         emit this->goto_normal();
-        event->accept();
+        // event->accept();
         maxMode = 0;
     }
     else
     {
         emit this->goto_fullscreen();
-        event->accept();
+        //  event->accept();
         maxMode = 1;
     }
 }

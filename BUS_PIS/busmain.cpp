@@ -12,9 +12,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "hidapi.h"
-/****************************************************************************/
-/*       MODIFIED  BUS PIS CODE ACCORDING TO 1366 X 768 RESOLUTION          */
-/*       ALL WIDGETS ARE PUT IN LAYOUTS TO PROVIDE BETTER SIZE ADJUSTMENTS*/
+/********************************************************************************************/
+/*       MODIFIED  BUS PIS CODE ACCORDING TO 1366 X 768 RESOLUTION                  **/
+/*       ALL WIDGETS ARE PUT IN LAYOUTS TO PROVIDE BETTER SIZE ADJUSTMENTS */
+
+/*******************************************************************************************/
 
 unsigned char prev_dup_crc_high,prev_dup_crc_low;
 unsigned char crc_low_final,crc_high_final;
@@ -22,7 +24,7 @@ unsigned char crc_low_final,crc_high_final;
 CRC LO0K UPS
 #######################################################################################*/
 unsigned char crc_high_lookup[] =
-    {
+{
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
     0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
     0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01,
@@ -41,10 +43,10 @@ unsigned char crc_high_lookup[] =
     0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
     0x40
-    };
+};
 
 unsigned char crc_low_lookup[] =
-    {
+{
     0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4,
     0x04, 0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09,
     0x08, 0xC8, 0xD8, 0x18, 0x19, 0xD9, 0x1B, 0xDB, 0xDA, 0x1A, 0x1E, 0xDE, 0xDF, 0x1F, 0xDD,
@@ -63,7 +65,7 @@ unsigned char crc_low_lookup[] =
     0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
     0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80,
     0x40
-    };
+};
 
 QTextStream in;
 int gps_filling_state = 0;
@@ -182,9 +184,9 @@ BusMain::BusMain(QWidget *parent) :
 {
     //CONSTRUCTOR
     ui->setupUi(this);
-
-    ui->statusBar->hide();
-
+    QVBoxLayout outer_layout;
+    //ui->statusBar->hide();
+    QDesktopWidget screen2;
     connect(this, SIGNAL(gps_valid_packet()), this, SLOT(route_tasks()));
     connect(this, SIGNAL(Route_Selection(qint64)), this, SLOT(display_and_announcement_packets(qint64)));
     connect(this, SIGNAL(Stop_Arrival(qint64)), this, SLOT(display_and_announcement_packets(qint64)));
@@ -203,12 +205,30 @@ BusMain::BusMain(QWidget *parent) :
     //revcam = new ReverseCamera;
 
     //HOME SCREEN
-    hom = new Home;
+    hom = new Home(this);
+    hom->setParent(this);
     connect(hom, SIGNAL(announcement_clicked()), this, SLOT(show_pre_recorded()));
+    ui->alarm->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->alert->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->bus->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->call->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->camera->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->data->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->gps->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->home->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->pass_info->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->play->setFixedSize(screen2.width()*1/10,(screen2.height()*1/4));
+    ui->line->setMaximumSize(screen2.width(),13);
+    ui->line->setGeometry(0,(screen2.height()*1/4)+5,screen2.width(),13);
+    ui->stackedWidget->setGeometry(0,ui->alarm->height()+ui->line->height(),screen2.width(),screen2.height()-(ui->alarm->height()+ui->line->height()+ui->statusBar->height())-5);
+    outer_layout.setSizeConstraint(QLayout::SetMinAndMaxSize);
+    outer_layout.setParent(this->centralWidget());
+    ui->line->setLayout(&outer_layout);
+    ui->stackedWidget->setLayout(&outer_layout);
+    // outer_layout.addLayout(ui->horizontalLayout);
+    //  outer_layout.addLayout(ui->verticalLayout);
 
-    //MEDIA PLAYER
-    mplay = new player;
-
+  //Q_ASSERT(outer_layout.count() % 2 == 1);  // USED TO CHECK TEST CONDITION.PRINTS CODE WHEN TEST CONDITION FAILS AND ABORT THE PROGRAM.
     //PRE RECORDED MESSAGE SCREEN
     prerecord = new PreRecorded;
     connect(prerecord, SIGNAL(back_running_route()), this, SLOT(back_to_running_route()));
@@ -235,15 +255,24 @@ BusMain::BusMain(QWidget *parent) :
 
     //gpsserial = new gps_serial;
 
-    //SURVEILLANCE SCREEN
-    cam = new Camera;
+
 
     //SURVEILLANCE VIDEO SAVING
-    ffmpeg = new FFmpegTask;
 
+    //SURVEILLANCE SCREEN
+   cam = new Camera;
+    //QTimer::singleShot(5000, this, SLOT(delay_camera()));
+
+    ffmpeg = new FFmpegTask;
+    qDebug() << "INSIDE MAIN WINDOW "<< ffmpeg->global_video_location;
+
+    //MEDIA PLAYER
+   mplay = new player();
+   mplay->player_video_location=ffmpeg->global_video_location;
     //ADDING SCREENS TO MAIN BUS WIDGET
+    qDebug() << "geometry of stack widget" << ui->stackedWidget->geometry();
     ui->stackedWidget->addWidget(hom);
-    ui->stackedWidget->addWidget(cam);
+   ui->stackedWidget->addWidget(cam);
     ui->stackedWidget->addWidget(mplay);
     ui->stackedWidget->addWidget(route_sel);
     ui->stackedWidget->addWidget(run_route);
@@ -251,8 +280,8 @@ BusMain::BusMain(QWidget *parent) :
     ui->stackedWidget->addWidget(prerecord);
 
     ui->stackedWidget->setCurrentWidget(hom);
-    ui->camera->setEnabled(0);
-    QTimer::singleShot(4000, this, SLOT(enable_camera()));
+   //ui->camera->setEnabled(0);
+    //QTimer::singleShot(1000, this, SLOT(enable_camera()));
 
     ui->bus->setEnabled(false);
     page_count = 0;
@@ -275,7 +304,7 @@ BusMain::BusMain(QWidget *parent) :
     threads[1]->start();
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(handleError(QSerialPort::SerialPortError)));
     connect(serial, SIGNAL(readyRead()), this, SLOT(readData()));
-
+    //  threads[0]->start();
     //TEMPORARY OBJECT TO SEND DATA THROUGH ANDROID
     server = new QTcpServer(this);
     // whenever a user connects, it will emit signal
@@ -296,7 +325,7 @@ BusMain::BusMain(QWidget *parent) :
     //MEDIA PLAYER AND PLAYLIST FOR AUDIO ANNOUNCEMENTS
     playlist = new QMediaPlaylist;
     mplayer = new QMediaPlayer;
-//    connect(playlist, SIGNAL(currentIndexChanged(int)), mplayer, SLOT(pause()));
+    //    connect(playlist, SIGNAL(currentIndexChanged(int)), mplayer, SLOT(pause()));
     connect(playlist, SIGNAL(currentIndexChanged(int)), timer, SLOT(start()));
     connect(playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(handleMedia(int)));
     connect(timer, SIGNAL(timeout()), mplayer, SLOT(play()));
@@ -314,11 +343,17 @@ BusMain::~BusMain()
     threads[2]->stop();
     closeSerialPort();
     //threads[1]->stop();
+
+
     delete cam;
     delete hom;
     //delete revcam;
     //delete socket;
+     system("pkill -9 ffmpeg");
+      delete ffmpeg;
     delete mplay;
+    system("pkill -9 gst-launch");
+       qDebug() << "Inside main Destructor";
     delete route_sel;
     delete run_route;
     delete prerecord;
@@ -408,31 +443,31 @@ void BusMain::gps_filling()
 {
     switch(gps_filling_state)
     {
-        case 0:
+    case 0:
+    {
+        //OPEN SIMULATION FILE
+        file.setFileName(gps_file);
+        if (file.exists())
         {
-            //OPEN SIMULATION FILE
-            file.setFileName(gps_file);
-            if (file.exists())
-            {
-                file.open(QIODevice::ReadOnly | QIODevice::Text);
-                in.setDevice(&file);
-                gps_filling_state++;
-                gps.data.status.bits.onsimulation = 1;
-            }
+            file.open(QIODevice::ReadOnly | QIODevice::Text);
+            in.setDevice(&file);
+            gps_filling_state++;
+            gps.data.status.bits.onsimulation = 1;
         }
+    }
         break;
-        case 1:
-            //READ LINE BY LINE FROM SIMULATION FILE
-            if(!in.atEnd())
-            {
-                gps_validity = 0;
-                file_data = in.readLine();
-                update_isr_data(file_data);
-                if(gps_validity)
-                    process_n_fill_packet();
-            }
-            else
-                gps.data.status.bits.onsimulation = 0;
+    case 1:
+        //READ LINE BY LINE FROM SIMULATION FILE
+        if(!in.atEnd())
+        {
+            gps_validity = 0;
+            file_data = in.readLine();
+            update_isr_data(file_data);
+            if(gps_validity)
+                process_n_fill_packet();
+        }
+        else
+            gps.data.status.bits.onsimulation = 0;
         break;
     }
 }
@@ -583,18 +618,18 @@ void BusMain::route_tasks()
 
     if(route_path.status.bits.bus_tracked)
     {
-       //CALCULATE DISTANCE OF STOP LAT/LONG FROM CURRENT GPS LAT/LONG
+        //CALCULATE DISTANCE OF STOP LAT/LONG FROM CURRENT GPS LAT/LONG
         route_path.Stops[route_path.Next_stop].info.gps_distance_from_prev_loc = route_path.Stops[route_path.Next_stop].info.gps_distance_from_curr_loc;
         route_path.Stops[route_path.Next_stop].info.gps_distance_from_curr_loc = _GET_DISTANCE(route_path.Next_stop);
         double curr_distance = 0;
         curr_distance = route_path.Stops[route_path.Next_stop].info.gps_distance_from_curr_loc * 1000;
         curr_distance = (((float)mul_factor[route_path.Next_stop - 1] * curr_distance) / 1000) + curr_distance;
-        #ifdef ACT_DIST
-            route_path.Stops[route_path.Next_stop].info.distance_from_curr_loc = (uinteger)curr_distance;
-        #else
-            route_path.Stops[route_path.Next_stop].info.distance_from_curr_loc = route_path.Stops[route_path.Next_stop].info.gps_distance_from_curr_loc;
-        #endif
-       //CHECK ARRIVAL,DEPARTURE,APPROACHING BASED ON PRESENT DISTANCES
+#ifdef ACT_DIST
+        route_path.Stops[route_path.Next_stop].info.distance_from_curr_loc = (uinteger)curr_distance;
+#else
+        route_path.Stops[route_path.Next_stop].info.distance_from_curr_loc = route_path.Stops[route_path.Next_stop].info.gps_distance_from_curr_loc;
+#endif
+        //CHECK ARRIVAL,DEPARTURE,APPROACHING BASED ON PRESENT DISTANCES
         route_path.status.bits.station_arrival = 0;
         route_path.status.bits.station_departure = 0;
         route_path.status.bits.station_approaching = 0;
@@ -633,7 +668,7 @@ void BusMain::route_tasks()
             }
             emit this->Stop_Departure(20);
         }
-       /*********************************************************************************************************************************************************/
+        /*********************************************************************************************************************************************************/
     }
 }
 
@@ -643,32 +678,33 @@ void BusMain::display_and_announcement_packets(qint64 option)
     temp_final_sending_data.clear();
     ack_unresponsive_final_data.clear();
     querytext.clear();
- //   timer->stop();
-  //  playlist->clear();
- //   mplayer->stop();
+    //   timer->stop();
+    //  playlist->clear();
+    //   mplayer->stop();
 
     //FIGURE OUT OPTION BASED ON TRIGGER
     switch(option)
     {
-        case 20:
-            //querytext = "select * from message_configuration_table where Message_trigger = 'Next Station' and Path_code = '" + path_code + "' and Stop_code = '" + QString::fromLatin1((const char*)route_path.Stops[route_path.Next_stop].info.Code) + "'";// order by Device_code desc";
-            querytext = "select * from message_configuration_table where Message_trigger = 'Entry Periphery' and Path_code = '" + path_code + "' and Stop_code = '" + QString::fromLatin1((const char*)route_path.Stops[route_path.Next_stop].info.Code) + "' order by Device_code desc";
-            //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
-            break;
+    case 20:
+        mplayer->playlist()->clear();
+        //querytext = "select * from message_configuration_table where Message_trigger = 'Next Station' and Path_code = '" + path_code + "' and Stop_code = '" + QString::fromLatin1((const char*)route_path.Stops[route_path.Next_stop].info.Code) + "'";// order by Device_code desc";
+        querytext = "select * from message_configuration_table where Message_trigger = 'Entry Periphery' and Path_code = '" + path_code + "' and Stop_code = '" + QString::fromLatin1((const char*)route_path.Stops[route_path.Next_stop].info.Code) + "' order by Device_code desc";
+        //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
+        break;
 
-        case 25:
-            querytext = "select * from message_configuration_table where Message_trigger = 'Pre Record' and Stop_code = '" + pre_recorded + "'";
-            //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
-            break;
+    case 25:
+        querytext = "select * from message_configuration_table where Message_trigger = 'Pre Record' and Stop_code = '" + pre_recorded + "'";
+        //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
+        break;
 
-        case 30:
-            //querytext = "select * from message_configuration_table where Message_trigger = 'Route Selected' and Path_code = '" + path_code + "' and Route = '" + route_no + "'";
-            querytext = "select * from message_configuration_table where Message_trigger = 'On Route Selection' and Path_code = '" + path_code + "' and Route = '" + route_no + "'";
-            //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
-            break;
+    case 30:
+        //querytext = "select * from message_configuration_table where Message_trigger = 'Route Selected' and Path_code = '" + path_code + "' and Route = '" + route_no + "'";
+        querytext = "select * from message_configuration_table where Message_trigger = 'On Route Selection' and Path_code = '" + path_code + "' and Route = '" + route_no + "'";
+        //querytext = "select * from message_configuration_table where Message_trigger = 'Door open' and Path_code = 'P001' and Stop_code = 'NDLS'";
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     //PICK OUT ALL ROWS OF QUERY
@@ -699,14 +735,14 @@ void BusMain::display_and_announcement_packets(qint64 option)
             QSqlQuery query3(querytextone);
             while(query3.next())
             {
-                   table_data_two.clear();
-                   QSqlRecord record_one = query3.record();
-                   for(int i=0; i < record_one.count(); i++)
-                        table_data_two << record_one.value(i).toString();
-                   QString v_file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/play_files/");
-                   v_file += table_data_two[SEGMENT_DATA];
-                   playlist->addMedia(QUrl::fromLocalFile(v_file));
-                   page_announce_segments[table_data_two[5].toInt() - 1] += 1;
+                table_data_two.clear();
+                QSqlRecord record_one = query3.record();
+                for(int i=0; i < record_one.count(); i++)
+                    table_data_two << record_one.value(i).toString();
+                QString v_file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/play_files/");
+                v_file += table_data_two[SEGMENT_DATA];
+                playlist->addMedia(QUrl::fromLocalFile(v_file));
+                page_announce_segments[table_data_two[5].toInt() - 1] += 1;
             }
         }
         if(dev_type == "Display")
@@ -732,23 +768,23 @@ void BusMain::display_and_announcement_packets(qint64 option)
                 temp_audio_repeat_count = audio_repeat_count;
 
                 //AUDIO ADDITION
-                //page_announce_segments[table_data_one[PAGE].toInt() - 1]  = 0;
-               // while(temp_audio_repeat_count > 0)
-            //    {
-            //        querytextone = "select * from Annuciation_device_type_table where Stop_code = '" + table_data[STOP_CODE] + "' and Message_code = '" + table_data[MESSAGE_CODE]  + "' and Page = '" + table_data_one[PAGE] + "'";
-            //        QSqlQuery query3(querytextone);
-            //        while(query3.next()){
-            //                table_data_two.clear();
-            //                QSqlRecord record_one = query3.record();
-             //               for(int i=0; i < record_one.count(); i++)
-              //                  table_data_two << record_one.value(i).toString();
-               //              QString v_file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/play_files/");
-                //             v_file += table_data_two[SEGMENT_DATA];
-                 //            playlist->addMedia(QUrl::fromLocalFile(v_file));
-                  //           page_announce_segments[table_data_one[PAGE].toInt() - 1] += 1;
-                   // }
-                  //  temp_audio_repeat_count--;
-                //}
+                page_announce_segments[table_data_one[PAGE].toInt() - 1]  = 0;
+                while(temp_audio_repeat_count > 0)
+                {
+                    querytextone = "select * from Annuciation_device_type_table where Stop_code = '" + table_data[STOP_CODE] + "' and Message_code = '" + table_data[MESSAGE_CODE]  + "' and Page = '" + table_data_one[PAGE] + "'";
+                    QSqlQuery query3(querytextone);
+                    while(query3.next()){
+                        table_data_two.clear();
+                        QSqlRecord record_one = query3.record();
+                        for(int i=0; i < record_one.count(); i++)
+                            table_data_two << record_one.value(i).toString();
+                        QString v_file ("/home/apaul/BUS_PIS_PROJECT/Resources/database/somnath/play_files/");
+                        v_file += table_data_two[SEGMENT_DATA];
+                        playlist->addMedia(QUrl::fromLocalFile(v_file));
+                        page_announce_segments[table_data_one[PAGE].toInt() - 1] += 1;
+                    }
+                    temp_audio_repeat_count--;
+                }
 
                 tempSectionCount = SectionCount;
                 SectionCount = table_data_one[SECTION_NO].toInt();
@@ -947,16 +983,16 @@ void BusMain::display_and_announcement_packets(qint64 option)
                                 ack_unresponsive_count++;
                                 if(ack_unresponsive_count == 3)
                                 {
-                                        acknowledgement_unresponsive = 1;
-                                        if(table_data_one[DEVICE_COD] == "D009")
-                                        {
-                                           QEventLoop pause;
-                                           mplayer->play();                    //to be done after sending data to displays
-                                           timer->setInterval((10000));        //to be added page duration here
-                                           pause.exec();                       //to be used for announcement events triggers
-                                        }
-                                 //       handleMedia(-1);
-                                        break;
+                                    acknowledgement_unresponsive = 1;
+                               /*     if(table_data_one[DEVICE_COD] == "D009")
+                                    {
+                                        QEventLoop pause;
+                                        mplayer->play();                    //to be done after sending data to displays
+                                        timer->setInterval((10000));        //to be added page duration here
+                                        pause.exec();                       //to be used for announcement events triggers
+                                    }*/
+                                    //       handleMedia(-1);
+                                    break;
                                 }
                                 continue;
                             }
@@ -970,7 +1006,7 @@ void BusMain::display_and_announcement_packets(qint64 option)
                         {
                             QEventLoop pause;
                             mplayer->play();                    //to be done after sending data to displays
-                            timer->setInterval((10000));        //to be added page duration here
+                            timer->setInterval((4000));        //to be added page duration here
                             pause.exec();                       //to be used for announcement events triggers
                             frame_num++;
                             lineCount--;
@@ -1010,7 +1046,7 @@ void BusMain::display_and_announcement_packets(qint64 option)
                     temporary.append(crc_high_final);
                     temporary.append(",ETX");
 
-                 //   qDebug() << temporary.size();
+                    //   qDebug() << temporary.size();
                     //qDebug() << temporary.size() << temporary;
                     //QTimer::singleShot(1500,mplayer,SLOT(play()));
                     page_count = 0;
@@ -1028,28 +1064,28 @@ void BusMain::display_and_announcement_packets(qint64 option)
                             {
                                 qDebug() << "Waiting for ack";
                                 /* Create the QEventLoop */
-                               // QEventLoop pause;
-                               // connect(this, SIGNAL(ack_received()), &pause, SLOT(quit()));
+                                // QEventLoop pause;
+                                // connect(this, SIGNAL(ack_received()), &pause, SLOT(quit()));
                                 this->readData();
                                 serial->waitForReadyRead(20);
                                 //QTimer::singleShot(2000, &pause, SLOT(quit()));
-                               // pause.exec();
+                                // pause.exec();
                             }
                             if(!successful_ack)
                             {
                                 ack_unresponsive_count++;
                                 if(ack_unresponsive_count == 3)
                                 {
-                                        acknowledgement_unresponsive = 1;
-                                        if(table_data_one[DEVICE_COD] == "D009")
-                                        {
-                                            QEventLoop pause;
-                                            mplayer->play();                    //to be done after sending data to displays
-                                            timer->setInterval((10000));        //to be added page duration here
-                                            pause.exec();                       //to be used for announcement events triggers
-                                        }
-                                        //handleMedia(-1);
-                                        break;
+                                    acknowledgement_unresponsive = 1;
+                                    if(table_data_one[DEVICE_COD] == "D009")
+                                    {
+                                        QEventLoop pause;
+                                        mplayer->play();                    //to be done after sending data to displays
+                                        timer->setInterval((4000));        //to be added page duration here
+                                        pause.exec();                       //to be used for announcement events triggers
+                                    }
+                                    //handleMedia(-1);
+                                    break;
                                 }
                                 continue;
                             }
@@ -1062,17 +1098,17 @@ void BusMain::display_and_announcement_packets(qint64 option)
                     {
                         QEventLoop pause;
                         mplayer->play();                    //to be done after sending data to displays
-                        timer->setInterval((10000));        //to be added page duration here
+                        timer->setInterval((4000));        //to be added page duration here
                         pause.exec();                       //to be used for announcement events triggers
                     }
                 }
                 //full_packet_sent = 1;
-           }
-       }
+            }
+        }
 
-     //  else if(dev_type == "AAU")
-     //  {
-            /*while(audio_repeat_count > 0)
+        //  else if(dev_type == "AAU")
+        //  {
+        /*while(audio_repeat_count > 0)
             {
                 querytextone = "select * from Annuciation_device_type_table where Stop_code = '" + table_data[STOP_CODE] + "' and Message_code = '" + table_data[MESSAGE_CODE]  + "'";
                 QSqlQuery query2(querytextone);
@@ -1087,9 +1123,9 @@ void BusMain::display_and_announcement_packets(qint64 option)
                 }
                 audio_repeat_count--;
             }*/
-            //qDebug() << "Announcement Done";
-     //  }
-   }
+        //qDebug() << "Announcement Done";
+        //  }
+    }
 }
 
 void BusMain::crc_generate_modbus(unsigned char* rec_buff_address, unsigned int rec_buff_length)
@@ -1110,7 +1146,7 @@ void BusMain::crc_generate_modbus(unsigned char* rec_buff_address, unsigned int 
 
 //unsigned char BusMain::verify_crc_modbus(QString *rec_buff_address, unsigned int rec_buff_length)
 //{
-    /*unsigned char dup_crc_low,dup_crc_high;
+/*unsigned char dup_crc_low,dup_crc_high;
 
     //dup_crc_high = *(rec_buff_address + rec_buff_length);
     //dup_crc_low = *(rec_buff_address + rec_buff_length + 1);
@@ -1212,7 +1248,7 @@ void BusMain::on_alert_clicked()
 {
     close();
     //emit this->trial_datasend();
-   // setter();
+    // setter();
 }
 
 void BusMain::newConnection()
@@ -1375,6 +1411,11 @@ void BusMain::setter()
 {
     if(serial->isOpen())
         write(m_write->socket(),sys_info.data.setting.bytes,11);
+}
+
+void BusMain::delay_camera()
+{
+    cam = new Camera;
 }
 
 void BusMain::getter()

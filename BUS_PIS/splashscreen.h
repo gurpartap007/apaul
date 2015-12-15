@@ -33,7 +33,7 @@ class mySplashScreen:public QSplashScreen
         ~mySplashScreen(){};
 
 private:
-      void paintEvent(QPaintEvent* event)
+      void paintEvent(QPaintEvent * event)
       {
              QPainter painter(this);
 
