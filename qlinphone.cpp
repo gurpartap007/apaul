@@ -7,6 +7,7 @@ bool CallStreamsRunning=false;
 bool CallEnd=false;
 bool CallError=false;
 bool isIncomingCall= false;
+extern char input[3];
 qlinphone::qlinphone(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::qlinphone)
@@ -118,9 +119,15 @@ void qlinphone::iterate()
 
 void qlinphone::talk_to_driver()
 {
-     //linphone_core_accept_call(lc,NULL);
-    //qDebug() << "inside talk_to_driver slot";
-    qlinphone_call(lc,(char *)"root@192.168.0.25");
+    QString mop_ip_address ;
+    QString input_ip;
+    mop_ip_address = "root@192.168.0.";
+    input_ip = input;
+    mop_ip_address = mop_ip_address + input_ip;
+    qDebug() << "MOP ADDRESS" << mop_ip_address;
+    //linphone_core_accept_call(lc,NULL);
+    qDebug() << "inside talk_to_driver slot";
+    qlinphone_call(lc,(char *)mop_ip_address.toStdString().c_str());
 }
 
 void qlinphone::end_current_call()
