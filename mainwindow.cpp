@@ -1,34 +1,46 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-bool CALL_CONNECTED = false,flag = false;
-char input[3];
- int input_count = 0;
- int cursor_position = 0;
-char *ptr;
-char input_characters_list[11]={'0','1','2','3','4','5','6','7','8','9','.'};
-
+typedef enum
+{
+    MOP_IP,
+    ETU_IP,
+    ETU_DIRECTION,
+    ETU_BOX_NO
+}input_mode;
+input_mode INPUT_MODE;
+bool CALL_CONNECTED  = false;
+bool flag            = false;
+bool call_barred     = false;
+char mop_ip[3];
+char etu_ip[3];
+char etu_box_no;
+char etu_direction;
+int input_count = 0;
+int cursor_position = 0;
+char input_characters_list[10]={'0','1','2','3','4','5','6','7','8','9'};
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ptr = &input[0];
     call_switch_poll =  new QTimer;
+    user_barred_timer = new QTimer;
     get_input_poll   =  new QTimer;
     emergency_call = new qlinphone;
     lcd = new Lcd_lib ;
-    memset(input,0,sizeof(input));
-    //input = &input_characters_list[0];
+    memset(mop_ip,0,sizeof(mop_ip));
+    memset(etu_ip,0,sizeof(etu_ip));
     get_input_poll->setInterval(200);
     call_switch_poll->setInterval(500);
-    //call_switch_poll->start();
     connect(call_switch_poll,SIGNAL(timeout()),this,SLOT(check_call_button_state()));
+    connect(user_barred_timer,SIGNAL(timeout()),this,SLOT(call_barred_timer_slot()));
     connect(get_input_poll,SIGNAL(timeout()),this,SLOT(check_input_buttons_state()));
     connect(this,SIGNAL(call_driver()),emergency_call,SLOT(talk_to_driver()));
     connect(emergency_call,SIGNAL(Call_ended()),this,SLOT(show_call_ended()));
+    connect(emergency_call,SIGNAL(call_barred(QString)),this,SLOT(show_call_barred(QString)));
     connect(emergency_call,SIGNAL(Call_connected()),this,SLOT(show_call_connected()));
     connect(this,SIGNAL(terminate_call()),emergency_call,SLOT(end_current_call()));
-    input_ip_address();
+    input_ip_address_for_mop();
 }
 
 MainWindow::~MainWindow()
@@ -48,13 +60,13 @@ void MainWindow::check_call_button_state()
     read(stop_button_fd,&value_stop_button,sizeof(char));
     lseek(call_button_fd,0,SEEK_SET);
     lseek(stop_button_fd,0,SEEK_SET);
-    if(!CALL_CONNECTED & (value_call_button == '0'))
+    if(!call_barred && !CALL_CONNECTED && (value_call_button == '0'))
     {
         qDebug() << "inside Call button routine";
         show_wait_for_driver_reply();
         emit call_driver() ;
     }
-    if(CALL_CONNECTED & (value_stop_button == '0'))
+    if(CALL_CONNECTED && (value_stop_button == '0'))
     {
         qDebug() << "inside stop button routine";
         emit terminate_call() ;
@@ -74,34 +86,102 @@ void MainWindow::check_input_buttons_state()
     lseek(enter_button_fd,0,SEEK_SET);
     if((value_up_button == '0'))
     {
-        if(input_count>=11)
+        if(input_count == 0 && cursor_position == 0)
+            send_clear();
+        if(input_count>=10)
             input_count = 0;
         qDebug() << "value_up_button presses" ;
         qDebug() << "count = " << input_count ;
         qDebug() << "Character = " << input_characters_list[input_count];
         lcd->send_command(0x80 + cursor_position);
-        send_byte(input_characters_list[input_count]);
-        input_count ++;
+        if(INPUT_MODE == ETU_DIRECTION)
+        {
+            qDebug() << "Inside ETU direction";
+            if(!input_count)
+                send_byte('L');
+            else
+                send_byte('R');
+            input_count = !input_count;
+        }
+        else
+        {
+            send_byte(input_characters_list[input_count]);
+            input_count ++;
+        }
     }
     if((value_enter_button == '0') && !flag )
     {
-       // get_input_poll->start();
         send_clear();
+        INPUT_MODE = MOP_IP;
         flag = true;
     }
     else if(value_enter_button == '0' && flag)
     {
-
-        input[cursor_position]  = input_characters_list[input_count-1];
-//        ptr ++;
-        qDebug() << "Enetered IP  = " << input;
-        cursor_position ++ ;
-        input_count = 0;
-        if(cursor_position == 2)
+        if(INPUT_MODE == MOP_IP)
         {
-            qDebug() << "get_input_poll Stopped";
+            mop_ip[cursor_position]  = input_characters_list[input_count-1];
+            input_count = 0 ;
+        }
+        else if(INPUT_MODE == ETU_IP)
+        {
+            etu_ip[cursor_position] = input_characters_list[input_count-1];
+            qDebug() << "ETU IP ==" << etu_ip;
+            input_count = 0 ;
+        }
+        else if(INPUT_MODE == ETU_DIRECTION)
+        {
+            if(input_count)
+                etu_direction = 'L';
+            else
+                etu_direction = 'R';
+            cursor_position ++;
+            input_count = 0 ;
+        }
+        else if(INPUT_MODE == ETU_BOX_NO)
+        {
+            etu_box_no = input_characters_list[input_count-1];
+            show_default_message();
             get_input_poll->stop();
             call_switch_poll->start();
+            qDebug() << "MOP IP        ==" << mop_ip;
+            qDebug() << "ETU IP        ==" << etu_ip;
+            qDebug() << "ETU DIRECTION ==" << etu_direction;
+            qDebug() << "ETU BOX NO    ==" << etu_box_no;
+        }
+        cursor_position ++ ;
+        if(cursor_position == 2)
+        {
+            switch(INPUT_MODE)
+            {
+            case  MOP_IP:
+                qDebug() << "MOP_IP CASE ";
+                INPUT_MODE = ETU_IP;
+                input_count = 0;
+                cursor_position = 0;
+                input_ip_address_for_etu();
+                qDebug() << "MOP IP ==" << mop_ip;
+                break;
+
+            case  ETU_IP:
+                qDebug() << "ETU_IP CASE";
+                INPUT_MODE = ETU_DIRECTION ;
+                input_count = 0;
+                cursor_position = 0;
+                set_etu_ip_address();
+                input_direction_for_etu();
+                qDebug() << "ETU IP ==" << etu_ip;
+                break;
+
+            case  ETU_DIRECTION:
+                qDebug() << "ETU_DIRECTION CASE";
+                INPUT_MODE = ETU_BOX_NO;
+                input_count = 0;
+                cursor_position = 0;
+                input_box_number();
+                qDebug() << "ETU DIRECTION ==" << etu_direction;
+                break;
+            }
+
         }
     }
 
@@ -110,23 +190,26 @@ void MainWindow::check_input_buttons_state()
 // show Call ended notification on lcd and after that show default message on LCD
 void MainWindow::show_call_ended()
 {
-    send_string("Emergency Call","Ended",2,4);
-    sleep(5);
+if(!call_barred)
+{
+    send_string("Emergency Call","Ended",1,5);
+    sleep(2);
     CALL_CONNECTED = false;
     show_default_message();
+}
 }
 
 // show Call Connected notification on lcd
 void MainWindow::show_call_connected()
 {
     CALL_CONNECTED = true;
-    send_string("Call Connected","Please Speak Now",4,1);
+    send_string("Call Connected","Please Speak Now",1,0);
 }
 
 // show default message on lcd
 void MainWindow::show_default_message()
 {
-    send_string("Press Call","in Emergency",4,3);
+    send_string("Press Call","in Emergency",1,3);
 }
 
 // show message when Call is ringing remotely
@@ -163,11 +246,54 @@ void MainWindow::send_clear()
     lcd->send_command(0x01);
 }
 
-void MainWindow::input_ip_address()
+void MainWindow::input_ip_address_for_mop()
 {
     send_clear();
-    send_string("Please Enter MOP","IP ADDRESS",3,5);
+    send_string("Enter MOP","IP ADDRESS",3,5);
     qDebug() << "Inside input_ip_address()";
     get_input_poll->start();
 }
 
+void MainWindow::input_ip_address_for_etu()
+{
+    send_clear();
+    send_string("Enter ETU","IP ADDRESS",3,5);
+}
+
+void MainWindow::input_direction_for_etu()
+{
+    send_clear();
+    send_string("Enter Direction","Of ETU",2,5);
+}
+
+void MainWindow::input_box_number()
+{
+    send_clear();
+    send_string("Enter ETU","Box Number",3,2);
+}
+
+void MainWindow::set_etu_ip_address()
+{
+    QByteArray set_manual_ip_address_command("ifconfig eth0 192.168.0.");
+    set_manual_ip_address_command.append(etu_ip);
+    qDebug() << "IP changed to" << set_manual_ip_address_command;
+//    system(set_manual_ip_address_command.toStdString().c_str());
+}
+
+   void MainWindow::show_call_barred(QString timeout)
+{
+//qDebug() << "Inside Call Barred Slot::" << " Timeout  " << timeout ;
+//send_clear();
+call_barred = true;
+user_barred_timer->start((timeout.toInt())*1000);
+send_string("You are" ,"Barred",3,5);
+}
+
+void MainWindow::call_barred_timer_slot()
+{
+call_barred=false;
+qDebug() << "Inside Call Barred Timer Slot::" ;
+CALL_CONNECTED=false;
+show_default_message();
+user_barred_timer->stop();
+}

@@ -11,6 +11,7 @@
 #include <QDir>
 #include "linphone/linphonecore.h"
 void qcall_state_changed(LinphoneCore *lc, LinphoneCall *call, LinphoneCallState cstate, const char *msg);
+void qlinphone_text_recieved(LinphoneCore *lc, LinphoneChatRoom *cr, const LinphoneAddress *from, const char *msg);
 namespace Ui {
 class qlinphone;
 }
@@ -29,6 +30,7 @@ public:
 signals:
     void Call_ended();
     void Call_connected();
+    void call_barred(QString timeout);
 public slots:
     void qlinphone_init();
     int qlinphone_call(LinphoneCore *lc, char *ip_address);
@@ -38,6 +40,7 @@ public slots:
 private:
     Ui::qlinphone *ui;
     friend void qcall_state_changed(LinphoneCore *lc, LinphoneCall *call, LinphoneCallState cstate, const char *msg);
+    friend void qlinphone_text_recieved(LinphoneCore *lc, LinphoneChatRoom *cr, const LinphoneAddress *from, const char *msg);
 };
 
 #endif // QLINPHONE_H

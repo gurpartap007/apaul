@@ -7,7 +7,10 @@ bool CallStreamsRunning=false;
 bool CallEnd=false;
 bool CallError=false;
 bool isIncomingCall= false;
-extern char input[3];
+bool CallReleased= false;
+bool current_call_barred = false;
+QString timeout;
+extern char mop_ip[3];
 qlinphone::qlinphone(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::qlinphone)
@@ -28,6 +31,7 @@ void qlinphone::qlinphone_init()
        QString config_file = confDir.absolutePath() + "/Linphone/.linphonerc";
        LinphoneCoreVTable vtable = {0};
        vtable.call_state_changed = qcall_state_changed;
+       vtable.text_received = qlinphone_text_recieved;
        lc = linphone_core_new(&vtable, config_file.toStdString().c_str() , NULL, this);
        QTimer *timer = new QTimer();
        connect(timer,SIGNAL(timeout()), this,SLOT(iterate()));
@@ -106,6 +110,11 @@ void qlinphone::iterate()
             CallError=false;
             qDebug() << "Error in establishing current Call";
         }
+        else if(CallReleased)
+	{
+	CallReleased=false;
+	emit Call_ended();
+	}
         else if(isIncomingCall)
         {
             QStringList caller_id;
@@ -115,6 +124,12 @@ void qlinphone::iterate()
             linphone_core_play_local(lc,"/opt/linphone/tester/sounds/oldphone.wav");
             isIncomingCall = false;
         }
+	else if(current_call_barred)
+		{
+		 emit call_barred(timeout);
+		qDebug() << "recieved timeout " << timeout;
+		 current_call_barred = false;	
+		}
 }
 
 void qlinphone::talk_to_driver()
@@ -122,18 +137,31 @@ void qlinphone::talk_to_driver()
     QString mop_ip_address ;
     QString input_ip;
     mop_ip_address = "root@192.168.0.";
-    input_ip = input;
+    input_ip = mop_ip;
     mop_ip_address = mop_ip_address + input_ip;
     qDebug() << "MOP ADDRESS" << mop_ip_address;
     //linphone_core_accept_call(lc,NULL);
     qDebug() << "inside talk_to_driver slot";
-    qlinphone_call(lc,(char *)mop_ip_address.toStdString().c_str());
+//    qlinphone_call(lc,(char *)mop_ip_address.toStdString().c_str());
+     qlinphone_call(lc,"root@192.168.0.29");
 }
 
 void qlinphone::end_current_call()
 {
     linphone_core_terminate_call(lc,call);
    // CallEnd = true;
+}
+void qlinphone_text_recieved(LinphoneCore *lc, LinphoneChatRoom *cr, const LinphoneAddress *from, const char *msg)
+{
+       QString recieved_msg;
+       QStringList parsed_string;
+        recieved_msg = QString::fromLatin1(msg);
+        parsed_string = recieved_msg.split(',');
+        qDebug() << "You Are " << parsed_string.at(0) << "for " << parsed_string.at(1) << "seconds";
+      timeout = parsed_string.at(1);
+      current_call_barred = true;
+    qDebug() <<  "Message received from " << linphone_address_as_string(from) <<  msg;
+      
 }
 void qcall_state_changed(LinphoneCore *lc, LinphoneCall *call, LinphoneCallState cstate, const char *msg)
 {
@@ -167,6 +195,9 @@ void qcall_state_changed(LinphoneCore *lc, LinphoneCall *call, LinphoneCallState
     case LinphoneCallError:
         qDebug() << "Call failure !";
         CallError=true;
+        break;
+   case LinphoneCallReleased:
+        CallReleased=true;
         break;
     default:
         qDebug() << "Unhandled notification " << cstate;

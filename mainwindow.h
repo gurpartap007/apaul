@@ -23,14 +23,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *call_switch_poll,*get_input_poll;
+    QTimer *call_switch_poll,*get_input_poll,*user_barred_timer;
     QThread *call_button_polling;
 
  signals:
 void call_driver();
 void terminate_call();
 public slots:
-
+   void show_call_barred(QString timeout);
    void check_call_button_state();
    void check_input_buttons_state();
    void show_call_ended();
@@ -40,7 +40,12 @@ public slots:
    void send_byte( char  byte);
    void send_string(const char * line1,const char * line2,int x,int y);
    void send_clear();
-   void input_ip_address();
+   void input_ip_address_for_mop();
+   void input_ip_address_for_etu();
+   void input_direction_for_etu();
+   void input_box_number();
+   void set_etu_ip_address();
+   void  call_barred_timer_slot();
 };
 
 #endif // MAINWINDOW_H
