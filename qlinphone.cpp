@@ -8,6 +8,7 @@ bool CallEnd=false;
 bool CallError=false;
 bool isIncomingCall= false;
 bool CallReleased= false;
+bool incoming_call_terminated = false;
 bool current_call_barred = false;
 QString timeout;
 extern char mop_ip[3];
@@ -36,6 +37,7 @@ void qlinphone::qlinphone_init()
        QTimer *timer = new QTimer();
        connect(timer,SIGNAL(timeout()), this,SLOT(iterate()));
        timer->start(5);
+//           linphone_core_set_sip_port(lc,5060);
        linphone_core_set_capture_device(lc,linphone_core_get_capture_device(lc));
        qDebug() << linphone_core_get_capture_device(lc);
 	
@@ -102,6 +104,9 @@ void qlinphone::iterate()
         else if(CallEnd)
         {
             CallEnd=false;
+           if(incoming_call_terminated)
+              incoming_call_terminated = false;
+           else
             emit Call_ended();
             qDebug() << "Current Call Ended";
         }
@@ -113,17 +118,8 @@ void qlinphone::iterate()
         else if(CallReleased)
 	{
 	CallReleased=false;
-	emit Call_ended();
+	//emit Call_ended();
 	}
-        else if(isIncomingCall)
-        {
-            QStringList caller_id;
-            new_call=linphone_core_get_current_call(lc);
-            caller_id = QString::fromUtf8(linphone_call_get_remote_address_as_string(new_call)).split('@');
-            linphone_core_set_playback_device(lc,linphone_core_get_playback_device(lc));
-            linphone_core_play_local(lc,"/opt/linphone/tester/sounds/oldphone.wav");
-            isIncomingCall = false;
-        }
 	else if(current_call_barred)
 		{
 		 emit call_barred(timeout);
@@ -143,7 +139,7 @@ void qlinphone::talk_to_driver()
     //linphone_core_accept_call(lc,NULL);
     qDebug() << "inside talk_to_driver slot";
 //    qlinphone_call(lc,(char *)mop_ip_address.toStdString().c_str());
-     qlinphone_call(lc,"root@192.168.0.29");
+     qlinphone_call(lc,"root@192.168.0.101");
 }
 
 void qlinphone::end_current_call()
@@ -178,7 +174,8 @@ void qcall_state_changed(LinphoneCore *lc, LinphoneCall *call, LinphoneCallState
         break;
     case LinphoneCallIncoming:
         qDebug() << "New Incoming Call";
-        isIncomingCall = true;
+        incoming_call_terminated = true;
+	linphone_core_terminate_call(lc,call);
         break;
     case LinphoneCallConnected:
         qDebug() << "We are connected ";

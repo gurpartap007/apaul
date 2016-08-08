@@ -18,6 +18,11 @@ char etu_direction;
 int input_count = 0;
 int cursor_position = 0;
 char input_characters_list[10]={'0','1','2','3','4','5','6','7','8','9'};
+int call_button_fd,stop_button_fd;
+int up_button_fd,enter_button_fd;
+char value_call_button,value_stop_button;
+char value_up_button,value_enter_button;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -28,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     get_input_poll   =  new QTimer;
     emergency_call = new qlinphone;
     lcd = new Lcd_lib ;
-    memset(mop_ip,0,sizeof(mop_ip));
+   memset(mop_ip,0,sizeof(mop_ip));
     memset(etu_ip,0,sizeof(etu_ip));
     get_input_poll->setInterval(200);
     call_switch_poll->setInterval(500);
@@ -41,7 +46,26 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(emergency_call,SIGNAL(Call_connected()),this,SLOT(show_call_connected()));
     connect(this,SIGNAL(terminate_call()),emergency_call,SLOT(end_current_call()));
     input_ip_address_for_mop();
-}
+    QString call_button_path;
+    call_button_path = QString::fromStdString("/sys/class/gpio/gpio23_ph16/value");
+    call_button_file.setFileName(call_button_path);
+//    call_button_file.open(QFile::ReadOnly);
+     QString stop_button_path;
+    stop_button_path = QString::fromStdString("/sys/class/gpio/gpio22_ph15/value");
+    stop_button_file.setFileName(stop_button_path);
+//    stop_button_file.open(QFile::ReadOnly);
+     QString up_button_path;
+    up_button_path = QString::fromStdString("/sys/class/gpio/gpio23_ph16/value");
+    up_button_file.setFileName(up_button_path);
+  //  up_button_file.open(QFile::ReadOnly);
+      QString enter_button_path;
+    enter_button_path = QString::fromStdString("/sys/class/gpio/gpio22_ph15/value");
+    enter_button_file.setFileName(enter_button_path);
+  //  enter_button_file.open(QFile::ReadOnly);
+//     get_input_poll->start();
+    //up_button_fd=open("/sys/class/gpio/gpio23_ph16/value",O_RDONLY);
+    //enter_button_fd=open("/sys/class/gpio/gpio22_ph15/value",O_RDONLY);
+   }
 
 MainWindow::~MainWindow()
 {
@@ -52,14 +76,15 @@ MainWindow::~MainWindow()
 // This function will poll the state of call and stop buttons and emit appropriate signals accordingly
 void MainWindow::check_call_button_state()
 {
-    char value_call_button,value_stop_button;
-    int call_button_fd,stop_button_fd;
-    call_button_fd=open("/sys/class/gpio/gpio23_ph16/value",O_RDONLY);
-    stop_button_fd=open("/sys/class/gpio/gpio22_ph15/value",O_RDONLY);
-    read(call_button_fd,&value_call_button,sizeof(char));
-    read(stop_button_fd,&value_stop_button,sizeof(char));
-    lseek(call_button_fd,0,SEEK_SET);
-    lseek(stop_button_fd,0,SEEK_SET);
+   call_button_file.open(QFile::ReadOnly);
+   stop_button_file.open(QFile::ReadOnly);  
+     call_button_file.seek(0);
+     call_button_file.read(&value_call_button,1);
+//     qDebug() << value_call_button;
+     stop_button_file.seek(0);
+     stop_button_file.read(&value_stop_button,1);
+//     qDebug() << value_stop_button;
+
     if(!call_barred && !CALL_CONNECTED && (value_call_button == '0'))
     {
         qDebug() << "inside Call button routine";
@@ -71,19 +96,22 @@ void MainWindow::check_call_button_state()
         qDebug() << "inside stop button routine";
         emit terminate_call() ;
     }
+    call_button_file.close();
+    stop_button_file.close();
+//	usleep(200);
 }
 
 void MainWindow::check_input_buttons_state()
 {
+     up_button_file.open(QFile::ReadOnly);
+     enter_button_file.open(QFile::ReadOnly);
+     up_button_file.seek(0);
+     up_button_file.read(&value_up_button,1);
+//     qDebug() << value_up_button;
+     enter_button_file.seek(0);
+     enter_button_file.read(&value_enter_button,1);
+//     qDebug() << value_enter_button;
 
-    char value_up_button,value_enter_button;
-    int up_button_fd,enter_button_fd;
-    up_button_fd=open("/sys/class/gpio/gpio23_ph16/value",O_RDONLY);
-    enter_button_fd=open("/sys/class/gpio/gpio22_ph15/value",O_RDONLY);
-    read(up_button_fd,&value_up_button,sizeof(char));
-    read(enter_button_fd,&value_enter_button,sizeof(char));
-    lseek(up_button_fd,0,SEEK_SET);
-    lseek(enter_button_fd,0,SEEK_SET);
     if((value_up_button == '0'))
     {
         if(input_count == 0 && cursor_position == 0)
@@ -184,12 +212,15 @@ void MainWindow::check_input_buttons_state()
 
         }
     }
-
+ up_button_file.close();
+ enter_button_file.close();
+//usleep(200);
 }
 
 // show Call ended notification on lcd and after that show default message on LCD
 void MainWindow::show_call_ended()
 {
+
 if(!call_barred)
 {
     send_string("Emergency Call","Ended",1,5);
@@ -197,6 +228,7 @@ if(!call_barred)
     CALL_CONNECTED = false;
     show_default_message();
 }
+
 }
 
 // show Call Connected notification on lcd
@@ -204,12 +236,13 @@ void MainWindow::show_call_connected()
 {
     CALL_CONNECTED = true;
     send_string("Call Connected","Please Speak Now",1,0);
+
 }
 
 // show default message on lcd
 void MainWindow::show_default_message()
 {
-    send_string("Press Call","in Emergency",1,3);
+ send_string("Press Call","in Emergency",1,3);
 }
 
 // show message when Call is ringing remotely
@@ -227,6 +260,7 @@ void MainWindow::send_byte( char byte)
 // lcd routine to write string along with line 1 starting postion x and line 2 starting position y
 void MainWindow::send_string(const char * line1,const char * line2,int x,int y)
 {
+
     int counter;
     unsigned int hex_x_position,hex_y_position;
     hex_x_position = x + 0x80;
@@ -282,8 +316,8 @@ void MainWindow::set_etu_ip_address()
 
    void MainWindow::show_call_barred(QString timeout)
 {
-//qDebug() << "Inside Call Barred Slot::" << " Timeout  " << timeout ;
-//send_clear();
+qDebug() << "Inside Call Barred Slot::" << " Timeout  " << timeout ;
+send_clear();
 call_barred = true;
 user_barred_timer->start((timeout.toInt())*1000);
 send_string("You are" ,"Barred",3,5);
@@ -291,9 +325,11 @@ send_string("You are" ,"Barred",3,5);
 
 void MainWindow::call_barred_timer_slot()
 {
+
 call_barred=false;
 qDebug() << "Inside Call Barred Timer Slot::" ;
 CALL_CONNECTED=false;
 show_default_message();
 user_barred_timer->stop();
+
 }

@@ -3,6 +3,7 @@
 #include "qlinphone.h"
 #include <QMainWindow>
 #include <QChar>
+#include <QFile>
 #include <QString>
 #include <lcd_lib.h>
 #include <lcd_lib_global.h>
@@ -25,7 +26,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *call_switch_poll,*get_input_poll,*user_barred_timer;
     QThread *call_button_polling;
-
+    QFile call_button_file,stop_button_file,up_button_file,enter_button_file;
  signals:
 void call_driver();
 void terminate_call();
